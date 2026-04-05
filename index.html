@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>嘉於的网页</title>
+<style>
+/* 三点跳动加载动画样式 */
+.load-wrap{
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  display:none;
+  z-index:9999; /* 确保加载层在最上层 */
+}
+.dot-box{
+  margin-bottom:20px;
+}
+.dot-box span{
+  display:inline-block;
+  width:12px;height:12px;
+  border-radius:50%;
+  background:#409eff;
+  margin:0 6px;
+  animation:jump 0.8s infinite ease-in-out;
+}
+.dot-box span:nth-child(2){animation-delay:0.15s;}
+.dot-box span:nth-child(3){animation-delay:0.3s;}
+
+/* 文字跳动动画 */
+.load-text{
+  font-size:22px;
+  font-weight:bold;
+  animation:textJump 1s infinite;
+}
+
+@keyframes jump{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-15px);}
+}
+@keyframes textJump{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+}
+</style>
+</head>
+<body style="background-color:#f0f8ff;">
+</head>
+ <body style="background-color:#f0f8ff;">
+<p style="color:#ff69b4;font-size:50px;text-align:center"> 欢迎来到嘉於的网页！</p>
+<p style="color:blue;font-size:40px;text-align:center">目前该网页还是建设状态，后续敬请期待！</p>
+<p style="color:green;font-size:40px;center;"><b>Welcome toJia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
+<!-- 加载动画容器（点击后显示） -->
+<div class="load-wrap" id="loadWrap">
+  <div class="dot-box">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="load-text" id="tipText"></div>
+</div>
+
+<script>
+const wrap = document.getElementById('loadWrap');
+const tip = document.getElementById('tipText');
+// 两段指定文案
+const textList = [
+  "不要再点了，正在努力加载(つ﹏<。)",
+  "啊啊啊啊啊跑跑跑动ingヾ(*’Ｏ’*)/"
+];
+
+// 随机颜色函数
+function getRandomColor(){
+  let r = Math.floor(Math.random()*256);
+  let g = Math.floor(Math.random()*256);
+  let b = Math.floor(Math.random()*256);
+  return `rgb(${r},${g},${b})`;
+}
+
+// 点击页面任意位置触发
+document.body.addEventListener('contextmenu',(e)=>{
+e.preventDefault();
+  // 防止连续点击重复触发
+  if(!wrap.style.display || wrap.style.display === "none"){
+    startPlay();
+  }
+});
+
+// 加载流程控制
+function startPlay(){
+  wrap.style.display = "block";
+  
+  // 第一段文字显示5秒
+  tip.innerText = textList[0];
+  tip.style.color = getRandomColor();
+  
+  // 5秒后切换第二段文字，再显示5秒
+  setTimeout(()=>{
+    tip.innerText = textList[1];
+    tip.style.color = getRandomColor();
+    
+    // 再5秒后隐藏加载层
+    setTimeout(()=>{
+      wrap.style.display = "none";
+    },5000);
+    
+  },5000);
+}
+</script>
+
+</html>
