@@ -57,6 +57,226 @@
   </div>
   <div class="load-text" id="tipText"></div>
 </div>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>定制版互动页面</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+  min-height: 100vh;
+  padding: 40px;
+  font-size: 18px;
+  line-height: 2;
+  background: #f8f9fa;
+  position: relative;
+  overflow-x: hidden;
+}
+.text-wrap {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+/* 标题分层 */
+.main-top-title {
+  font-size: 32px;
+  color: #222;
+  margin-bottom: 8px;
+}
+.main-sub-title {
+  font-size: 24px;
+  color: #444;
+  margin-bottom: 20px;
+}
+p {color:#555;margin-bottom:15px;}
+
+/* 改成100px圆形渐变按钮 */
+.circle-btn {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+}
+.circle-btn:hover {transform: scale(1.1);}
+
+.btn1 {background: linear-gradient(135deg,#ff7eb3,#ff758c);top:120px;left:15%;}
+.btn2 {background: linear-gradient(135deg,#4facfe,#00f2fe);top:300px;right:20%;}
+.btn3 {background: linear-gradient(135deg,#43e97b,#38f9d7);top:480px;left:25%;}
+.btn4 {background: linear-gradient(135deg,#fa709a,#fee140);top:650px;right:15%;}
+.btn5 {background: linear-gradient(135deg,#a818da,#667eea);top:820px;left:40%;}
+
+/* 暖黄弹窗 + 右上角关闭叉号 */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #fff3d9;
+  border-radius: 16px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+/* 弹窗关闭X */
+.close-x {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 26px;
+  cursor: pointer;
+  color: #777;
+  user-select: none;
+}
+.close-x:hover {
+  color: #e74c3c;
+}
+
+.popup-btn {
+  padding: 12px 25px;
+  border-radius: 10px;
+  border: none;
+  background: #ffd89b;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.popup-btn:hover {background: #ffc878;}
+
+/* App内部页面 */
+.app-page {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 25;
+  display: none;
+  padding: 60px 40px;
+  animation: pageIn 0.5s ease;
+}
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* 左上角返回箭头 */
+.back-arrow {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 32px;
+  color: #333;
+  cursor: pointer;
+  z-index: 30;
+  display: none;
+  user-select: none;
+}
+.back-arrow:hover {
+  color: #f5b86e;
+}
+
+.app-page h2{font-size:28px;margin-bottom:20px;color:#222;}
+.app-page p{font-size:17px;color:#666;}
+</style>
+</head>
+<body>
+
+<!-- 返回箭头按钮 -->
+<div class="back-arrow" id="backArrow">←</div>
+
+<!-- 首页分层标题 -->
+<div class="text-wrap" id="homePage">
+  <div class="main-top-title">欢迎来到</div>
+  <div class="main-sub-title">欢迎来到主界面</div>
+  <p>彩色圆形按钮散落在文字周围，不会遮挡内容。</p>
+  <p>点击大圆按钮弹出菜单，进入内部页面。</p>
+  <p>左上角 ← 箭头返回首页，弹窗右上角可关闭。</p>
+</div>
+
+<!-- 5个100px渐变大圆按钮 -->
+<button class="circle-btn btn1"></button>
+<button class="circle-btn btn2"></button>
+<button class="circle-btn btn3"></button>
+<button class="circle-btn btn4"></button>
+<button class="circle-btn btn5"></button>
+
+<!-- 带关闭X的弹窗 -->
+<div class="popup" id="mainPopup">
+  <div class="close-x" id="closePopup">✘</div>
+  <button class="popup-btn" data-page="explore">探索</button>
+  <button class="popup-btn" data-page="publish">发表</button>
+  <button class="popup-btn" data-page="sticker">贴纸</button>
+</div>
+
+<!-- 三个内页 -->
+<div class="app-page" id="page-explore">
+  <h2>🔍 探索页面</h2>
+  <p>热门内容、推荐作品、精选合集都在这里。</p>
+</div>
+<div class="app-page" id="page-publish">
+  <h2>✏️ 发表页面</h2>
+  <p>发布图文、上传作品、编辑内容专区。</p>
+</div>
+<div class="app-page" id="page-sticker">
+  <h2>🎨 贴纸页面</h2>
+  <p>表情包、装饰贴纸、素材库专区。</p>
+</div>
+
+<script>
+const circleBtns = document.querySelectorAll('.circle-btn');
+const mainPopup = document.getElementById('mainPopup');
+const closePopup = document.getElementById('closePopup');
+const popupBtns = document.querySelectorAll('.popup-btn');
+const appPages = document.querySelectorAll('.app-page');
+const backArrow = document.getElementById('backArrow');
+
+// 打开弹窗
+circleBtns.forEach(btn=>{
+  btn.onclick = ()=> mainPopup.style.display = "flex";
+});
+
+// 弹窗右上角X关闭
+closePopup.onclick = ()=>{
+  mainPopup.style.display = "none";
+};
+
+// 进入内页 + 显示返回箭头
+popupBtns.forEach(btn=>{
+  btn.onclick = ()=>{
+    mainPopup.style.display = "none";
+    let target = btn.getAttribute("data-page");
+    appPages.forEach(p=>p.style.display="none");
+    document.getElementById("page-"+target).style.display="block";
+    backArrow.style.display = "block";
+  };
+});
+
+// 仅箭头返回首页（彻底删掉右键功能）
+backArrow.onclick = function(){
+  appPages.forEach(p=>p.style.display = "none");
+  backArrow.style.display = "none";
+};
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
 
 <script>
 const wrap = document.getElementById('loadWrap');
