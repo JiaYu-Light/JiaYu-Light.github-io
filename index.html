@@ -2,471 +2,524 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>嘉於的网页</title>
-<style>
-/* 涂鸦弹窗：占屏幕1/2 */
-#drawModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 50vw;
-  height: 100vh;
-  background: #fff;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  display: none;
-  z-index: 9999;
-}
-#drawCanvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  cursor: crosshair;
-  background: #fafafa;
-}
-#saveBtn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #10b981;
-  color: #fff;
-  font-size: 24px;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-}
-#publishBtn {
-  padding: 12px 30px;
-  font-size: 18px;
-  cursor: pointer;
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 30px;
-}
-#imgBox {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-.wave-img {
-  width: 100px;
-  height: 100px;
-  padding: 6px;
-  border: 3px solid #f472b6;
-  border-radius: 12px;
-  clip-path: polygon(
-    0% 5%,5% 0%,10% 5%,15% 0%,20% 5%,25% 0%,30% 5%,35% 0%,40% 5%,45% 0%,50% 5%,
-    55% 0%,60% 5%,65% 0%,70% 5%,75% 0%,80% 5%,85% 0%,90% 5%,95% 0%,100% 5%,
-    100% 95%,95% 100%,90% 95%,85% 100%,80% 95%,75% 100%,70% 95%,65% 100%,60% 95%,55% 100%,50% 95%,
-    45% 100%,40% 95%,35% 100%,30% 95%,25% 100%,20% 95%,15% 100%,10% 95%,5% 100%,0% 95%
-  );
-  background: #fff;
-}
-/* 三点跳动加载动画样式 */
-.load-wrap{
-  position:fixed;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
-  display:none;
-  z-index:9999; /* 确保加载层在最上层 */
-}
-.dot-box{
-  margin-bottom:20px;
-}
-.dot-box span{
-  display:inline-block;
-  width:12px;height:12px;
-  border-radius:50%;
-  background:#409eff;
-  margin:0 6px;
-  animation:jump 0.8s infinite ease-in-out;
-}
-.dot-box span:nth-child(2){animation-delay:0.15s;}
-.dot-box span:nth-child(3){animation-delay:0.3s;}
-
-/* 文字跳动动画 */
-.load-text{
-  font-size:22px;
-  font-weight:bold;
-  animation:textJump 1s infinite;
-}
-
-@keyframes jump{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-15px);}
-}
-@keyframes textJump{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.08);}
-}
-</style>
-</head>
-<body style="background-color:#f0f8ff;">
-</head>
- <body style="background-color:#f0f8ff;">
-<p style="color:#ff69b4;font-size:50px;text-align:center"> 欢迎来到嘉於的网页！</p>
-<p style="color:blue;font-size:40px;text-align:center">目前该网页还是建设状态，后续敬请期待！</p>
-<p style="color:green;font-size:40px;center;"><b>Welcome toJia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
-<!-- 加载动画容器（点击后显示） -->
-<div class="load-wrap" id="loadWrap">
-  <div class="dot-box">
-    <span></span><span></span><span></span>
-  </div>
-  <div class="load-text" id="tipText"></div>
-</div>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>定制版互动页面</title>
-<style>
-* {margin:0;padding:0;box-sizing:border-box;}
-body {
-  min-height: 100vh;
-  padding: 40px;
-  font-size: 18px;
-  line-height: 2;
-  background: #f8f9fa;
-  position: relative;
-  overflow-x: hidden;
-}
-.text-wrap {
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-/* 标题分层 */
-.main-top-title {
-  font-size: 32px;
-  color: #222;
-  margin-bottom: 8px;
-}
-.main-sub-title {
-  font-size: 24px;
-  color: #444;
-  margin-bottom: 20px;
-}
-p {color:#555;margin-bottom:15px;}
-
-/* 改成100px圆形渐变按钮 */
-.circle-btn {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  z-index: 5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: transform 0.2s ease;
-}
-.circle-btn:hover {transform: scale(1.1);}
-
-.btn1 {background: linear-gradient(135deg,#ff7eb3,#ff758c);top:120px;left:15%;}
-.btn2 {background: linear-gradient(135deg,#4facfe,#00f2fe);top:300px;right:20%;}
-.btn3 {background: linear-gradient(135deg,#43e97b,#38f9d7);top:480px;left:25%;}
-.btn4 {background: linear-gradient(135deg,#fa709a,#fee140);top:650px;right:15%;}
-.btn5 {background: linear-gradient(135deg,#a818da,#667eea);top:820px;left:40%;}
-
-/* 暖黄弹窗 + 右上角关闭叉号 */
-.popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  background: #fff3d9;
-  border-radius: 16px;
-  padding: 30px 40px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-  z-index: 20;
-  display: none;
-  flex-direction: column;
-  gap: 18px;
-  position: relative;
-}
-/* 弹窗关闭X */
-.close-x {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 26px;
-  cursor: pointer;
-  color: #777;
-  user-select: none;
-}
-.close-x:hover {
-  color: #e74c3c;
-}
-
-.popup-btn {
-  padding: 12px 25px;
-  border-radius: 10px;
-  border: none;
-  background: #ffd89b;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.popup-btn:hover {background: #ffc878;}
-
-/* App内部页面 */
-.app-page {
-  position: fixed;
-  inset: 0;
-  background: #fff;
-  z-index: 25;
-  display: none;
-  padding: 60px 40px;
-  animation: pageIn 0.5s ease;
-}
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-/* 左上角返回箭头 */
-.back-arrow {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 32px;
-  color: #333;
-  cursor: pointer;
-  z-index: 30;
-  display: none;
-  user-select: none;
-}
-.back-arrow:hover {
-  color: #f5b86e;
-}
-
-.app-page h2{font-size:28px;margin-bottom:20px;color:#222;}
-.app-page p{font-size:17px;color:#666;}
-</style>
+    <style>
+        /* 全局样式重置 */
+        * {margin:0;padding:0;box-sizing:border-box;}
+        body {
+            min-height: 100vh;
+            padding: 40px;
+            font-size: 18px;
+            line-height: 2;
+            background: #f0f8ff;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* 顶部欢迎文字 */
+        .welcome-wrap {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .welcome-wrap p {
+            margin: 10px 0;
+        }
+        /* 涂鸦弹窗：占屏幕1/2 */
+        #drawModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50vw;
+            height: 100vh;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 9999;
+            position: relative;
+        }
+        #drawCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: crosshair;
+            background: #fafafa;
+        }
+        #saveBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #10b981;
+            color: #fff;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #publishBtn {
+            padding: 12px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        #imgBox {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .wave-img {
+            width: 100px;
+            height: 100px;
+            padding: 6px;
+            border: 3px solid #f472b6;
+            border-radius: 12px;
+            clip-path: polygon(
+                0% 5%,5% 0%,10% 5%,15% 0%,20% 5%,25% 0%,30% 5%,35% 0%,40% 5%,45% 0%,50% 5%,
+                55% 0%,60% 5%,65% 0%,70% 5%,75% 0%,80% 5%,85% 0%,90% 5%,95% 0%,100% 5%,
+                100% 95%,95% 100%,90% 95%,85% 100%,80% 95%,75% 100%,70% 95%,65% 100%,60% 95%,55% 100%,50% 95%,
+                45% 100%,40% 95%,35% 100%,30% 95%,25% 100%,20% 95%,15% 100%,10% 95%,5% 100%,0% 95%
+            );
+            background: #fff;
+        }
+        /* 三点跳动加载动画样式 */
+        .load-wrap{
+            position:fixed;
+            top:50%;left:50%;
+            transform:translate(-50%,-50%);
+            text-align:center;
+            display:none;
+            z-index:9999; /* 确保加载层在最上层 */
+        }
+        .dot-box{
+            margin-bottom:20px;
+        }
+        .dot-box span{
+            display:inline-block;
+            width:12px;height:12px;
+            border-radius:50%;
+            background:#409eff;
+            margin:0 6px;
+            animation:jump 0.8s infinite ease-in-out;
+        }
+        .dot-box span:nth-child(2){animation-delay:0.15s;}
+        .dot-box span:nth-child(3){animation-delay:0.3s;}
+        /* 文字跳动动画 */
+        .load-text{
+            font-size:22px;
+            font-weight:bold;
+            animation:textJump 1s infinite;
+        }
+        /* 标题分层 */
+        .main-top-title {
+            font-size: 32px;
+            color: #222;
+            margin-bottom: 8px;
+        }
+        .main-sub-title {
+            font-size: 24px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        /* 改成100px圆形渐变按钮 */
+        .circle-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            z-index: 5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease;
+        }
+        .circle-btn:hover {transform: scale(1.1);}
+        .btn1 {background: linear-gradient(135deg,#ff7eb3,#ff758c);top:120px;left:15%;}
+        .btn2 {background: linear-gradient(135deg,#4facfe,#00f2fe);top:300px;right:20%;}
+        .btn3 {background: linear-gradient(135deg,#43e97b,#38f9d7);top:480px;left:25%;}
+        .btn4 {background: linear-gradient(135deg,#fa709a,#fee140);top:650px;right:15%;}
+        .btn5 {background: linear-gradient(135deg,#a818da,#667eea);top:820px;left:40%;}
+        /* 暖黄弹窗 + 右上角关闭叉号 */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: #fff3d9;
+            border-radius: 16px;
+            padding: 30px 40px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            z-index: 20;
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+        }
+        /* 弹窗关闭X */
+        .close-x {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 26px;
+            cursor: pointer;
+            color: #777;
+            user-select: none;
+        }
+        .close-x:hover {
+            color: #e74c3c;
+        }
+        .popup-btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            border: none;
+            background: #ffd89b;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .popup-btn:hover {background: #ffc878;}
+        /* App内部页面 */
+        .app-page {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 25;
+            display: none;
+            padding: 60px 40px;
+            animation: pageIn 0.5s ease;
+        }
+        /* 左上角返回箭头 */
+        .back-arrow {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 32px;
+            color: #333;
+            cursor: pointer;
+            z-index: 30;
+            display: none;
+            user-select: none;
+        }
+        .back-arrow:hover {
+            color: #f5b86e;
+        }
+        .app-page h2{font-size:28px;margin-bottom:20px;color:#222;}
+        .app-page p{font-size:17px;color:#666;}
+        /* 涂鸦新增功能样式：清空✘、色环、擦除按钮 */
+        #clearCanvas {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: #fff;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #colorPicker {
+            position: absolute;
+            top: 20px;
+            left: 80px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+        #eraserBtn {
+            position: absolute;
+            top: 20px;
+            left: 140px;
+            width: 60px;
+            height: 50px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #000;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        #eraserBtn.active {
+            background: #2563eb;
+            color: #fff;
+        }
+        /* 动画关键帧 */
+        @keyframes jump{
+            0%,100%{transform:translateY(0);}
+            50%{transform:translateY(-15px);}
+        }
+        @keyframes textJump{
+            0%,100%{transform:scale(1);}
+            50%{transform:scale(1.08);}
+        }
+        @keyframes pageIn{
+            from{opacity:0;transform:translateY(20px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+    </style>
 </head>
 <body>
+    <!-- 顶部欢迎文字 -->
+    <div class="welcome-wrap">
+        <p style="color:#ff69b4;font-size:50px"> 欢迎来到嘉於的网页！</p>
+        <p style="color:blue;font-size:40px">目前该网页还是建设状态，后续敬请期待！</p>
+        <p style="color:green;font-size:40px;"><b>Welcome toJia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
+    </div>
 
-<!-- 返回箭头按钮 -->
-<div class="back-arrow" id="backArrow">←</div>
+    <!-- 加载动画容器（点击后显示） -->
+    <div class="load-wrap" id="loadWrap">
+        <div class="dot-box">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="load-text" id="tipText"></div>
+    </div>
 
-<!-- 首页分层标题 -->
-<div class="text-wrap" id="homePage">
-  <div class="main-top-title">欢迎来到</div>
-  <div class="main-sub-title">欢迎来到主界面</div>
-  <p>彩色圆形按钮散落在文字周围，不会遮挡内容。</p>
-  <p>点击大圆按钮弹出菜单，进入内部页面。</p>
-  <p>左上角 ← 箭头返回首页，弹窗右上角可关闭。</p>
-</div>
+    <!-- 返回箭头按钮 -->
+    <div class="back-arrow" id="backArrow">←</div>
 
-<!-- 5个100px渐变大圆按钮 -->
-<button class="circle-btn btn1"></button>
-<button class="circle-btn btn2"></button>
-<button class="circle-btn btn3"></button>
-<button class="circle-btn btn4"></button>
-<button class="circle-btn btn5"></button>
+    <!-- 首页分层标题 -->
+    <div class="text-wrap" id="homePage">
+        <div class="main-top-title">欢迎来到</div>
+        <div class="main-sub-title">欢迎来到主界面</div>
+        <p>彩色圆形按钮散落在文字周围，不会遮挡内容。</p>
+        <p>点击大圆按钮弹出菜单，进入内部页面。</p>
+        <p>左上角 ← 箭头返回首页，弹窗右上角可关闭。</p>
+    </div>
 
-<!-- 带关闭X的弹窗 -->
-<div class="popup" id="mainPopup">
-  <div class="close-x" id="closePopup">✘</div>
-  <button class="popup-btn" data-page="explore">探索</button>
-  <button class="popup-btn" data-page="publish">发表</button>
-  <button class="popup-btn" data-page="sticker">贴纸</button>
-</div>
+    <!-- 5个100px渐变大圆按钮 -->
+    <button class="circle-btn btn1"></button>
+    <button class="circle-btn btn2"></button>
+    <button class="circle-btn btn3"></button>
+    <button class="circle-btn btn4"></button>
+    <button class="circle-btn btn5"></button>
 
-<!-- 三个内页 -->
-<div class="app-page" id="page-explore">
-  <h2>🔍 探索页面</h2>
-  <p>热门内容、推荐作品、精选合集都在这里。</p>
-</div>
-<div class="app-page" id="page-publish">
-  <h2>✏️ 发表页面</h2>
-  <p>发布图文、上传作品、编辑内容专区。</p>
- <!-- 👇 涂鸦功能HTML，直接插在这里 -->
-  <button id="publishBtn">开始涂鸦</button>
+    <!-- 带关闭X的弹窗 -->
+    <div class="popup" id="mainPopup">
+        <div class="close-x" id="closePopup">✘</div>
+        <button class="popup-btn" data-page="explore">探索</button>
+        <button class="popup-btn" data-page="publish">发表</button>
+        <button class="popup-btn" data-page="sticker">贴纸</button>
+    </div>
 
-  <!-- 涂鸦弹窗（默认隐藏，点按钮弹出） -->
-  <div id="drawModal">
-    <button id="saveBtn">✔</button>
-    <canvas id="drawCanvas"></canvas>
-  </div>
+    <!-- 三个内页 -->
+    <div class="app-page" id="page-explore">
+        <h2>🔍 探索页面</h2>
+        <p>热门内容、推荐作品、精选合集都在这里。</p>
+    </div>
+    <div class="app-page" id="page-publish">
+        <h2>✏️ 发表页面</h2>
+        <p>发布图文、上传作品、编辑内容专区。</p>
+        <!-- 涂鸦功能 -->
+        <button id="publishBtn">开始涂鸦</button>
+        <!-- 涂鸦弹窗（默认隐藏，点按钮弹出） -->
+        <div id="drawModal">
+            <button id="clearCanvas">✘</button>
+            <input type="color" id="colorPicker" value="#000000">
+            <button id="eraserBtn">擦除</button>
+            <button id="saveBtn">✔</button>
+            <canvas id="drawCanvas"></canvas>
+        </div>
+        <!-- 存放生成的带波浪框的涂鸦图片 -->
+        <div id="imgBox"></div>
+    </div>
+    <div class="app-page" id="page-sticker">
+        <h2>🎨 贴纸页面</h2>
+        <p>表情包、装饰贴纸、素材库专区。</p>
+    </div>
 
-  <!-- 存放生成的带波浪框的涂鸦图片 -->
-  <div id="imgBox"></div>
-</div>
-<div class="app-page" id="page-sticker">
-  <h2>🎨 贴纸页面</h2>
-  <p>表情包、装饰贴纸、素材库专区。</p>
-</div>
+    <script>
+        // ========== 1. 加载动画功能 ==========
+        const wrap = document.getElementById('loadWrap');
+        const tip = document.getElementById('tipText');
+        // 两段指定文案
+        const textList = [
+            "不要再点了，正在努力加载(つ﹏<。)",
+            "啊啊啊啊啊跑跑跑动ingヾ(*’Ｏ’*)/"
+        ];
+        // 随机颜色函数
+        function getRandomColor(){
+            let r = Math.floor(Math.random()*256);
+            let g = Math.floor(Math.random()*256);
+            let b = Math.floor(Math.random()*256);
+            return `rgb(${r},${g},${b})`;
+        }
+        // 点击页面任意位置触发
+        document.body.addEventListener('contextmenu',(e)=>{
+            e.preventDefault();
+            // 防止连续点击重复触发
+            if(!wrap.style.display || wrap.style.display === "none"){
+                startPlay();
+            }
+        });
+        // 加载流程控制
+        function startPlay(){
+            wrap.style.display = "block";
+            // 第一段文字显示5秒
+            tip.innerText = textList[0];
+            tip.style.color = getRandomColor();
+            // 5秒后切换第二段文字，再显示5秒
+            setTimeout(()=>{
+                tip.innerText = textList[1];
+                tip.style.color = getRandomColor();
+                // 再5秒后隐藏加载层
+                setTimeout(()=>{
+                    wrap.style.display = "none";
+                },5000);
+            },5000);
+        }
 
-<script>
-// ========== 涂鸦画板核心逻辑（直接追加到现有script末尾） ==========
-const publishBtn = document.getElementById('publishBtn');
-const drawModal = document.getElementById('drawModal');
-const saveBtn = document.getElementById('saveBtn');
-const canvas = document.getElementById('drawCanvas');
-const ctx = canvas.getContext('2d');
-const imgBox = document.getElementById('imgBox');
+        // ========== 2. 主界面弹窗/内页切换功能 ==========
+        const circleBtns = document.querySelectorAll('.circle-btn');
+        const mainPopup = document.getElementById('mainPopup');
+        const closePopup = document.getElementById('closePopup');
+        const popupBtns = document.querySelectorAll('.popup-btn');
+        const appPages = document.querySelectorAll('.app-page');
+        const backArrow = document.getElementById('backArrow');
+        // 打开弹窗
+        circleBtns.forEach(btn=>{
+            btn.onclick = ()=> mainPopup.style.display = "flex";
+        });
+        // 弹窗右上角X关闭
+        closePopup.onclick = ()=>{
+            mainPopup.style.display = "none";
+        };
+        // 进入内页 + 显示返回箭头
+        popupBtns.forEach(btn=>{
+            btn.onclick = ()=>{
+                mainPopup.style.display = "none";
+                let target = btn.getAttribute("data-page");
+                appPages.forEach(p=>p.style.display="none");
+                document.getElementById("page-"+target).style.display="block";
+                backArrow.style.display = "block";
+            };
+        });
+        // 仅箭头返回首页
+        backArrow.onclick = function(){
+            appPages.forEach(p=>p.style.display = "none");
+            backArrow.style.display = "none";
+        };
 
-// 画布适配弹窗大小
-function resizeCanvas(){
-  canvas.width = drawModal.clientWidth;
-  canvas.height = drawModal.clientHeight;
-  ctx.lineWidth = 4;
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = '#000';
-}
-window.addEventListener('resize', resizeCanvas);
+        // ========== 3. 涂鸦画板核心功能（含新增擦除/色环/清空） ==========
+        const publishBtn = document.getElementById('publishBtn');
+        const drawModal = document.getElementById('drawModal');
+        const saveBtn = document.getElementById('saveBtn');
+        const clearCanvas = document.getElementById('clearCanvas');
+        const colorPicker = document.getElementById('colorPicker');
+        const eraserBtn = document.getElementById('eraserBtn');
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        const imgBox = document.getElementById('imgBox');
 
-// 涂鸦核心逻辑
-let drawing = false;
-let lastX = 0, lastY = 0;
+        // 涂鸦状态变量
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+        let currentColor = '#000000'; // 当前画笔颜色
+        let lineWidth = 4; // 画笔粗细
+        let isEraser = false; // 擦除模式开关
 
-canvas.addEventListener('mousedown',(e)=>{
-  drawing = true;
-  lastX = e.offsetX;
-  lastY = e.offsetY;
-})
-canvas.addEventListener('mousemove',draw);
-canvas.addEventListener('mouseup',()=>drawing=false);
-canvas.addEventListener('mouseleave',()=>drawing=false);
+        // 画布适配弹窗大小
+        function resizeCanvas(){
+            canvas.width = drawModal.clientWidth;
+            canvas.height = drawModal.clientHeight;
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+        }
+        window.addEventListener('resize', resizeCanvas);
 
-function draw(e){
-  if(!drawing) return;
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-  lastX = e.offsetX;
-  lastY = e.offsetY;
-}
-// 打开涂鸦面板（点按钮弹出半屏画布）
-publishBtn.onclick = ()=>{
-  drawModal.style.display = 'block';
-  resizeCanvas();
-  ctx.clearRect(0,0,canvas.width,canvas.height); //清空上次涂鸦
-}
+        // 涂鸦核心绘制函数
+        function draw(e){
+            if(!drawing) return;
+            // 擦除模式：透明覆盖
+            if (isEraser) {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = lineWidth * 3; // 擦除笔更粗，方便操作
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentColor;
+                ctx.lineWidth = lineWidth;
+            }
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        }
 
-// 点击完成：生成100px图 + 波浪相框 + 左到右排列
-saveBtn.onclick = ()=>{
-  // 1. 把涂鸦画布缩成100px正方形
-  const tempCanvas = document.createElement('canvas');
-  const tempCtx = tempCanvas.getContext('2d');
-  tempCanvas.width = 100;
-  tempCanvas.height = 100;
-  tempCtx.drawImage(canvas,0,0,canvas.width,canvas.height,0,0,100,100);
-  
-  // 2. 转图片，加波浪相框样式
-  const imgUrl = tempCanvas.toDataURL('image/png');
-  const img = new Image();
-  img.src = imgUrl;
-  img.className = 'wave-img';
+        // 画布鼠标事件
+        canvas.addEventListener('mousedown',(e)=>{
+            drawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        })
+        canvas.addEventListener('mousemove',draw);
+        canvas.addEventListener('mouseup',()=>drawing=false);
+        canvas.addEventListener('mouseleave',()=>drawing=false);
 
-  // 3. 添加到发表页面，自动从左到右排列
-  imgBox.appendChild(img);
+        // 新增：左上角清空画布
+        clearCanvas.onclick = ()=>{
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+        };
 
-  // 关闭涂鸦面板
-  drawModal.style.display = 'none';
-}
+        // 新增：色环选择颜色（自动关闭擦除）
+        colorPicker.addEventListener('input',(e)=>{
+            currentColor = e.target.value;
+            isEraser = false;
+            eraserBtn.classList.remove('active');
+            ctx.strokeStyle = currentColor;
+        });
 
-const circleBtns = document.querySelectorAll('.circle-btn');
-const mainPopup = document.getElementById('mainPopup');
-const closePopup = document.getElementById('closePopup');
-const popupBtns = document.querySelectorAll('.popup-btn');
-const appPages = document.querySelectorAll('.app-page');
-const backArrow = document.getElementById('backArrow');
+        // 新增：擦除按钮切换（蓝色高亮为激活）
+        eraserBtn.onclick = ()=>{
+            isEraser = !isEraser;
+            if (isEraser) {
+                eraserBtn.classList.add('active');
+            } else {
+                eraserBtn.classList.remove('active');
+            }
+        };
 
-// 打开弹窗
-circleBtns.forEach(btn=>{
-  btn.onclick = ()=> mainPopup.style.display = "flex";
-});
+        // 打开涂鸦面板（点按钮弹出半屏画布）
+        publishBtn.onclick = ()=>{
+            drawModal.style.display = 'block';
+            resizeCanvas();
+            ctx.clearRect(0,0,canvas.width,canvas.height); //清空上次涂鸦
+        }
 
-// 弹窗右上角X关闭
-closePopup.onclick = ()=>{
-  mainPopup.style.display = "none";
-};
-
-// 进入内页 + 显示返回箭头
-popupBtns.forEach(btn=>{
-  btn.onclick = ()=>{
-    mainPopup.style.display = "none";
-    let target = btn.getAttribute("data-page");
-    appPages.forEach(p=>p.style.display="none");
-    document.getElementById("page-"+target).style.display="block";
-    backArrow.style.display = "block";
-  };
-});
-
-// 仅箭头返回首页（彻底删掉右键功能）
-backArrow.onclick = function(){
-  appPages.forEach(p=>p.style.display = "none");
-  backArrow.style.display = "none";
-};
-</script>
-
+        // 点击完成：生成100px图 + 波浪相框 + 左到右排列
+        saveBtn.onclick = ()=>{
+            // 1. 把涂鸦画布缩成100px正方形
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = 100;
+            tempCanvas.height = 100;
+            tempCtx.drawImage(canvas,0,0,canvas.width,canvas.height,0,0,100,100);
+            
+            // 2. 转图片，加波浪相框样式
+            const imgUrl = tempCanvas.toDataURL('image/png');
+            const img = new Image();
+            img.src = imgUrl;
+            img.className = 'wave-img';
+            // 3. 添加到发表页面，自动从左到右排列
+            imgBox.appendChild(img);
+            // 关闭涂鸦面板
+            drawModal.style.display = 'none';
+        }
+    </script>
 </body>
-</html>
-
-</body>
-</html>
-
-<script>
-const wrap = document.getElementById('loadWrap');
-const tip = document.getElementById('tipText');
-// 两段指定文案
-const textList = [
-  "不要再点了，正在努力加载(つ﹏<。)",
-  "啊啊啊啊啊跑跑跑动ingヾ(*’Ｏ’*)/"
-];
-
-// 随机颜色函数
-function getRandomColor(){
-  let r = Math.floor(Math.random()*256);
-  let g = Math.floor(Math.random()*256);
-  let b = Math.floor(Math.random()*256);
-  return `rgb(${r},${g},${b})`;
-}
-
-// 点击页面任意位置触发
-document.body.addEventListener('contextmenu',(e)=>{
-e.preventDefault();
-  // 防止连续点击重复触发
-  if(!wrap.style.display || wrap.style.display === "none"){
-    startPlay();
-  }
-});
-
-// 加载流程控制
-function startPlay(){
-  wrap.style.display = "block";
-  
-  // 第一段文字显示5秒
-  tip.innerText = textList[0];
-  tip.style.color = getRandomColor();
-  
-  // 5秒后切换第二段文字，再显示5秒
-  setTimeout(()=>{
-    tip.innerText = textList[1];
-    tip.style.color = getRandomColor();
-    
-    // 再5秒后隐藏加载层
-    setTimeout(()=>{
-      wrap.style.display = "none";
-    },5000);
-    
-  },5000);
-}
-</script>
-
 </html>
