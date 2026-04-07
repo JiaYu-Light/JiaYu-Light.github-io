@@ -40,6 +40,22 @@ body {
     margin: 10px 0;
     text-shadow: 0 2px 4px rgba(255,255,255,0.8); /* 梦幻柔光文字阴影 */
 }
+/* 全局禁用长按菜单 + 文字选择 */
+body {
+  -webkit-touch-callout: none; /* iOS 长按禁止弹出菜单 */
+  -webkit-user-select: none;   /* 禁用文字选择 */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 画布和图片区域强化禁用 */
+#drawCanvas, .wave-img, .zoom-img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: auto; /* 确保事件生效 */
+}
 /* 涂鸦弹窗：占屏幕1/2 */
 #drawModal {
     position: fixed;
@@ -374,7 +390,7 @@ body {
     <div class="welcome-wrap">
         <p style="color:#f088a8;font-size:50px"> 欢迎来到嘉於的网页！</p>
         <p style="color:#88c8f8;font-size:40px">目前该网页还是建设状态，后续敬请期待！</p>
-        <p style="color:#88f8a8;font-size:24px;"><b>Welcome to Jia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
+        <p style="color:#88c8f8;font-size:24px;"><b>Welcome to Jia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
     </div>
     <!-- 加载动画容器（点击后显示） -->
     <div class="load-wrap" id="loadWrap">
@@ -564,7 +580,9 @@ body {
         }
         function draw(e) {
             if (!drawing) return;
-            const pos = getCanvasPos(e);
+            // 兼容触摸事件
+            const event = e.touches ? e.touches[0] : e;
+            const pos = getCanvasPos(event);
             if (isEraser) {
                 ctx.globalCompositeOperation = 'destination-out';
                 ctx.lineWidth = lineWidth * 3;
@@ -580,6 +598,7 @@ body {
             lastX = pos.x;
             lastY = pos.y;
         }
+        // 鼠标事件
         canvas.addEventListener('mousedown', (e) => {
             drawing = true;
             const pos = getCanvasPos(e);
@@ -589,30 +608,69 @@ body {
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', () => drawing = false);
         canvas.addEventListener('mouseleave', () => drawing = false);
+        // 触摸事件（移动端适配）
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            drawing = true;
+            const touch = e.touches[0];
+            const pos = getCanvasPos(touch);
+            lastX = pos.x;
+            lastY = pos.y;
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            draw(e);
+        });
+        canvas.addEventListener('touchend', () => drawing = false);
+        canvas.addEventListener('touchcancel', () => drawing = false);
+        // 清空画布
         clearCanvas.onclick = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // 清空后重绘白色背景
             ctx.fillStyle = '#fafafa';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         };
+        // 颜色选择器
         colorPicker.addEventListener('input', (e) => {
             currentColor = e.target.value;
             isEraser = false;
             eraserBtn.classList.remove('active');
             ctx.strokeStyle = currentColor;
         });
+        // 橡皮擦功能
         eraserBtn.onclick = () => {
             isEraser = !isEraser;
             eraserBtn.classList.toggle('active', isEraser);
         };
+        // 打开涂鸦弹窗
         publishBtn.onclick = () => {
             resetAllStates();
             drawModal.style.display = 'block';
             setTimeout(resizeCanvas, 10);
         };
+        // 保存涂鸦（核心修复：增加本地存储调用+空画布判断）
         saveBtn.onclick = () => {
+            // 获取画布原图数据
             originalImageData = canvas.toDataURL('image/png');
             
+            // 空画布判断：避免保存空白图片
+            const blankCanvas = document.createElement('canvas');
+            blankCanvas.width = canvas.width;
+            blankCanvas.height = canvas.height;
+            const blankCtx = blankCanvas.getContext('2d');
+            blankCtx.fillStyle = '#fafafa';
+            blankCtx.fillRect(0, 0, blankCanvas.width, blankCanvas.height);
+            const blankData = blankCanvas.toDataURL('image/png');
+            
+            if (originalImageData === blankData) {
+                alert('画布为空，无需保存～');
+                return;
+            }
+
+            // 保存到本地存储（核心修复）
+            saveImageToStorage(originalImageData);
+            
+            // 生成缩略图并添加到页面
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             tempCanvas.width = 100;
@@ -625,6 +683,8 @@ body {
             img.className = 'wave-img';
             img.dataset.original = originalImageData;
             imgBox.appendChild(img);
+            
+            // 关闭涂鸦弹窗
             drawModal.style.display = 'none';
         };
         // ========== 4. 图片放大/缩小功能 ==========
@@ -640,6 +700,60 @@ body {
                 zoomImg.src = '';
             }
         });
+// 本地存储工具函数 - 管理涂鸦图片
+const STORAGE_KEY = 'jiayu_doodle_images';
+
+// 读取本地存储的图片列表
+function getStoredImages() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  return stored ? JSON.parse(stored) : [];
+}
+
+// 保存图片到本地存储（增加容量限制）
+function saveImageToStorage(imgData) {
+  const images = getStoredImages();
+  // 限制最多保存20张，避免localStorage溢出
+  if (images.length >= 20) {
+      alert('最多只能保存20张涂鸦哦～');
+      return;
+  }
+  images.push(imgData);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+}
+
+// 清空指定图片（可选，如需删除功能可加）
+function removeImageFromStorage(imgData) {
+  let images = getStoredImages();
+  images = images.filter(item => item !== imgData);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+}
+
+// 页面加载时恢复存储的图片
+function renderStoredImages() {
+  const images = getStoredImages();
+  const imgBox = document.getElementById('imgBox');
+  images.forEach(imgData => {
+    const img = new Image();
+    // 生成缩略图（和保存时逻辑一致）
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCanvas.width = 100;
+    tempCanvas.height = 100;
+    
+    // 先加载原图再缩放到缩略图
+    const originalImg = new Image();
+    originalImg.src = imgData;
+    originalImg.onload = () => {
+      tempCtx.drawImage(originalImg, 0, 0, originalImg.width, originalImg.height, 0, 0, 100, 100);
+      img.src = tempCanvas.toDataURL('image/png');
+      img.className = 'wave-img';
+      img.dataset.original = imgData;
+      imgBox.appendChild(img);
+    };
+  });
+}
+// 页面加载完成后恢复存储的涂鸦图片
+window.addEventListener('DOMContentLoaded', renderStoredImages);
     </script>
 </body>
 </html>
