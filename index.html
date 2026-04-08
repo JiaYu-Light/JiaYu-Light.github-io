@@ -7,7 +7,7 @@
     <style>
 /* 全局样式重置 */
 * {margin:0;padding:0;box-sizing:border-box;}
-/* 抽象油画棒粉嫩玫瑰花海 - 全局背景（核心：唯一body样式，不被覆盖） */
+/* 抽象油画棒粉嫩玫瑰花海 - 全局背景 */
 body {
   min-height: 100vh;
   padding: 40px;
@@ -15,48 +15,52 @@ body {
   line-height: 2;
   position: relative;
   overflow-x: hidden;
-  /* 梦幻粉嫩渐变底色 */
   background: linear-gradient(135deg, #fff5f8 0%, #ffe8ef 30%, #ffd9e6 60%, #ffccd8 100%);
   background-attachment: fixed;
-  /* 油画棒噪点肌理+抽象玫瑰纹理叠加 */
   background-image: 
-    /* 油画棒粗糙笔触噪点 */
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
-    /* 抽象玫瑰淡纹理（低透明度，不抢内容） */
     url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23f8a8c8' stroke-width='1' stroke-opacity='0.2'%3E%3Cpath d='M100,50 C120,30 150,40 160,60 C170,80 160,110 140,130 C120,150 90,160 100,180 C110,160 80,150 60,130 C40,110 30,80 40,60 C50,40 80,30 100,50 Z'/%3E%3Cpath d='M60,80 C70,60 90,70 100,90 C110,110 100,130 80,140 C60,150 30,140 40,120 C50,100 50,70 60,80 Z' stroke='%23f088a8' stroke-opacity='0.3'/%3E%3Cpath d='M140,80 C150,60 170,70 180,90 C190,110 180,130 160,140 C140,150 110,140 120,120 C130,100 130,70 140,80 Z' stroke='%23f088a8' stroke-opacity='0.3'/%3E%3C/g%3E%3C/svg%3E"),
     linear-gradient(135deg, #fff5f8, #ffccd8);
-  /* 玫瑰纹理重复平铺，营造花海感 */
   background-repeat: repeat;
   background-size: auto, 300px 300px, 100% 100%;
+}
+/* 日期显示 */
+.date-display {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #f088a8;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(255,255,255,0.8);
+    position: relative;
+    z-index: 2;
 }
 /* 顶部欢迎文字 */
 .welcome-wrap {
     text-align: center;
     margin-bottom: 50px;
     position: relative;
-    z-index: 2; /* 文字悬浮在花海上方 */
+    z-index: 2;
 }
 .welcome-wrap p {
     margin: 10px 0;
-    text-shadow: 0 2px 4px rgba(255,255,255,0.8); /* 梦幻柔光文字阴影 */
+    text-shadow: 0 2px 4px rgba(255,255,255,0.8);
 }
-/* 全局禁用长按菜单 + 文字选择 */
+/* 全局禁用长按选择 */
 body {
-  -webkit-touch-callout: none; /* iOS 长按禁止弹出菜单 */
-  -webkit-user-select: none;   /* 禁用文字选择 */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
-
-/* 画布和图片区域强化禁用 */
 #drawCanvas, .wave-img, .zoom-img {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
-  pointer-events: auto; /* 确保事件生效 */
+  pointer-events: auto;
 }
-/* 涂鸦弹窗：占屏幕1/2 */
+/* 涂鸦弹窗 */
 #drawModal {
     position: fixed;
     top: 0;
@@ -90,37 +94,67 @@ body {
     cursor: pointer;
     z-index: 10;
 }
+/* 发表页面专属样式：青绿色渐变背景 + 含羞草纹理 + 青绿色文字 */
+#page-publish {
+    background: linear-gradient(135deg, #e6f4ea 0%, #d4e6c8 50%, #c8f0e0 100%) !important;
+    background-image: 
+        linear-gradient(135deg, #e6f4ea 0%, #d4e6c8 50%, #c8f0e0 100%),
+        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%232d9d78' stroke-width='1' stroke-opacity='0.25'%3E%3Cpath d='M50,100 C70,80 90,90 100,110 C110,130 100,150 80,160 C60,170 30,160 40,140 C50,120 50,90 50,100 Z'/%3E%3Cpath d='M150,100 C170,80 190,90 180,110 C170,130 160,150 140,160 C120,170 90,160 100,140 C110,120 130,90 150,100 Z'/%3E%3Cpath d='M100,50 C120,30 140,40 130,60 C120,80 110,100 90,110 C70,120 50,110 60,90 C70,70 90,30 100,50 Z'/%3E%3Cpath d='M100,150 C120,130 140,140 130,160 C120,180 110,200 90,190 C70,180 50,170 60,150 C70,130 90,130 100,150 Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 250px 250px;
+    backdrop-filter: blur(8px);
+}
+#page-publish h2 {
+    color: #2d9d78 !important;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+}
+#page-publish > p {
+    color: #2d9d78 !important;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+}
 #publishBtn {
     padding: 12px 30px;
     font-size: 18px;
     cursor: pointer;
-    background: #f8a8c8; /* 适配玫瑰色的按钮 */
-    color: #fff;
-    border: none;
+    background: linear-gradient(135deg, #e6f4ea, #2d9d78);
+    color: #fff !important;
+    border: 2px solid #2d9d78;
     border-radius: 8px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 8px rgba(248,168,200,0.3);
+    box-shadow: 0 4px 8px rgba(45,157,120,0.3);
     position: relative;
     z-index: 2;
 }
 #publishBtn:hover {
-    background: #f088a8; /* 花蕊深粉色hover */
+    background: linear-gradient(135deg, #2d9d78, #1a7f5f);
+    transform: scale(1.05);
 }
+/* 图片容器：优化排版间距 */
 #imgBox {
     display: flex;
-    gap: 15px;
+    gap: 30px;
     flex-wrap: wrap;
     align-items: flex-start;
     position: relative;
-    min-height: 100px;
+    min-height: 150px;
     z-index: 2;
+    padding: 20px 0;
+}
+/* 涂鸦图片：扩大2倍（200x200）+ 右上角删除按钮 */
+.img-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 200px;
 }
 .wave-img {
-    width: 100px;
-    height: 100px;
-    padding: 6px;
-    border: 3px solid #f8a8c8; /* 玫瑰粉边框 */
-    border-radius: 12px;
+    width: 200px;
+    height: 200px;
+    padding: 8px;
+    border: 4px solid #2d9d78;
+    border-radius: 16px;
     clip-path: polygon(
         0% 5%,5% 0%,10% 5%,15% 0%,20% 5%,25% 0%,30% 5%,35% 0%,40% 5%,45% 0%,50% 5%,
         55% 0%,60% 5%,65% 0%,70% 5%,75% 0%,80% 5%,85% 0%,90% 5%,95% 0%,100% 5%,
@@ -134,10 +168,70 @@ body {
     z-index: 1;
 }
 .wave-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(248,168,200,0.5);
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(45,157,120,0.6);
 }
-/* 图片放大遮罩层（解决模糊+优化体验） */
+/* 删除按钮 */
+.delete-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    background: #ff5252;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 10;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.delete-btn:hover {
+    background: #e03131;
+    transform: scale(1.1);
+}
+/* 文案+日期样式：强制显示，青绿色渐变 【核心修复：提高权重+强制可见】 */
+.text-wrapper {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+    width: 100%;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    visibility: visible !important;
+    z-index: 5 !important;
+    height: 60px;
+    justify-content: center;
+    overflow: hidden;
+}
+#page-publish .doodle-text {
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block !important;
+    background: linear-gradient(90deg, #2d9d78, #86e073) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+    font-size: 16px;
+    line-height: 1.4;
+}
+#page-publish .date-text {
+    font-size: 14px;
+    display: block !important;
+    background: linear-gradient(90deg, #10b981, #34d399) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+    line-height: 1.4;
+}
+/* 图片放大遮罩 */
 .zoom-mask {
     position: fixed;
     top: 0;
@@ -153,13 +247,13 @@ body {
 .zoom-img {
     max-width: 90vw;
     max-height: 90vh;
-    border: 5px solid #f8a8c8; /* 玫瑰粉放大边框 */
+    border: 5px solid #2d9d78;
     border-radius: 16px;
     background: #fff;
     cursor: zoom-out;
-    box-shadow: 0 0 50px rgba(248,168,200,0.6); /* 玫瑰粉柔光阴影 */
+    box-shadow: 0 0 50px rgba(45,157,120,0.6);
 }
-/* 三点跳动加载动画样式 */
+/* 加载动画 */
 .load-wrap{
     position:fixed;
     top:50%;left:50%;
@@ -179,23 +273,22 @@ body {
     display:inline-block;
     width:12px;height:12px;
     border-radius:50%;
-    background: #f8a8c8; /* 玫瑰粉加载点 */
+    background: #2d9d78;
     margin:0 6px;
     animation:jump 0.8s infinite ease-in-out;
 }
 .dot-box span:nth-child(2){animation-delay:0.15s;}
 .dot-box span:nth-child(3){animation-delay:0.3s;}
-/* 文字跳动动画 */
 .load-text{
     font-size:22px;
     font-weight:bold;
     animation:textJump 1s infinite;
-    color: #f088a8; /* 花蕊深粉加载文字 */
+    color: #2d9d78;
 }
-/* 标题分层 */
+/* 标题 */
 .main-top-title {
     font-size: 32px;
-    color: #f088a8; /* 花蕊深粉标题 */
+    color: #f088a8;
     margin-bottom: 8px;
     position: relative;
     z-index: 2;
@@ -203,13 +296,13 @@ body {
 }
 .main-sub-title {
     font-size: 24px;
-    color: #f8a8c8; /* 玫瑰粉子标题 */
+    color: #f8a8c8;
     margin-bottom: 20px;
     position: relative;
     z-index: 2;
     text-shadow: 0 2px 4px rgba(255,255,255,0.8);
 }
-/* 改成100px圆形渐变按钮（适配玫瑰花海色调） */
+/* 圆形按钮 */
 .circle-btn {
     width: 100px;
     height: 100px;
@@ -222,22 +315,22 @@ body {
     transition: transform 0.2s ease;
 }
 .circle-btn:hover {transform: scale(1.1);box-shadow: 0 6px 15px rgba(248,168,200,0.4);}
-.btn1 {background: linear-gradient(135deg,#ffccd8,#f8a8c8);top:120px;left:15%;} /* 玫瑰粉系 */
-.btn2 {background: linear-gradient(135deg,#c8e8ff,#88c8f8);top:300px;right:20%;} /* 浅蓝撞色 */
-.btn3 {background: linear-gradient(135deg,#d8f8e8,#88f8a8);top:480px;left:25%;} /* 浅绿撞色 */
-.btn4 {background: linear-gradient(135deg,#ffe8c8,#f8c888);top:650px;right:15%;} /* 浅黄撞色 */
-.btn5 {background: linear-gradient(135deg,#e8d8f8,#c888f8);top:820px;left:40%;} /* 浅紫撞色 */
-/* 暖黄弹窗 + 右上角关闭叉号：居中悬空+适配大小（加柔光） */
+.btn1 {background: linear-gradient(135deg,#ffccd8,#f8a8c8);top:120px;left:15%;}
+.btn2 {background: linear-gradient(135deg,#c8e8ff,#88c8f8);top:300px;right:20%;}
+.btn3 {background: linear-gradient(135deg,#d8f8e8,#88f8a8);top:480px;left:25%;}
+.btn4 {background: linear-gradient(135deg,#ffe8c8,#f8c888);top:650px;right:15%;}
+.btn5 {background: linear-gradient(135deg,#e8d8f8,#c888f8);top:820px;left:40%;}
+/* 弹窗 */
 .popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background: rgba(255,243,217,0.95); /* 半透明暖黄，适配梦幻感 */
-    backdrop-filter: blur(8px); /* 高斯模糊，梦幻核心 */
+    background: rgba(255,243,217,0.95);
+    backdrop-filter: blur(8px);
     border-radius: 16px;
     padding: 40px 50px;
-    box-shadow: 0 8px 30px rgba(248,168,200,0.3); /* 玫瑰粉柔光阴影 */
+    box-shadow: 0 8px 30px rgba(248,168,200,0.3);
     z-index: 20;
     display: none;
     flex-direction: column;
@@ -246,14 +339,13 @@ body {
     width: 280px;
     height: auto;
 }
-/* 弹窗关闭X */
 .close-x {
     position: absolute;
     top: 12px;
     right: 16px;
     font-size: 26px;
     cursor: pointer;
-    color: #f088a8; /* 玫瑰粉关闭叉 */
+    color: #f088a8;
     user-select: none;
 }
 .close-x:hover {
@@ -271,21 +363,37 @@ body {
     color: #666;
 }
 .popup-btn:hover {
-    background: #f8a8c8; /* 玫瑰粉hover */
+    background: #f8a8c8;
     color: #fff;
     box-shadow: 0 4px 8px rgba(248,168,200,0.3);
 }
-/* App内部页面（加半透明+模糊，适配花海） */
+/* 内页通用排版优化 */
 .app-page {
     position: fixed;
     inset: 0;
-    background: rgba(255,255,255,0.9); /* 半透明白底 */
-    backdrop-filter: blur(10px); /* 梦幻高斯模糊 */
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
     z-index: 25;
     display: none;
     padding: 60px 40px;
     animation: pageIn 0.5s ease;
     overflow-y: auto;
+}
+.app-page h2{
+    font-size:28px;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f8a8c8;
+    color: #f088a8;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+}
+.app-page > p{
+    font-size:17px;
+    color: #666;
+    line-height:1.8;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 15px;
 }
 /* 左上角返回箭头 */
 .back-arrow {
@@ -293,7 +401,7 @@ body {
     top: 20px;
     left: 20px;
     font-size: 32px;
-    color: #f088a8; /* 玫瑰粉箭头 */
+    color: #f088a8;
     cursor: pointer;
     z-index: 30;
     display: none;
@@ -304,20 +412,7 @@ body {
     color: #d86888;
     transform: scale(1.1);
 }
-.app-page h2{
-    font-size:28px;
-    margin-bottom:20px;
-    color: #f088a8; /* 花蕊深粉内页标题 */
-    text-shadow: 0 1px 3px rgba(255,255,255,0.8);
-}
-.app-page p{
-    font-size:17px;
-    color: #666;
-    line-height:1.8;
-    position: relative;
-    z-index: 2;
-}
-/* 涂鸦新增功能样式：清空✘、色环、擦除按钮 */
+/* 涂鸦工具 */
 #clearCanvas {
     position: absolute;
     top: 20px;
@@ -360,10 +455,10 @@ body {
     transition: background 0.2s;
 }
 #eraserBtn.active {
-    background: #f8a8c8; /* 玫瑰粉激活擦除 */
+    background: #2d9d78;
     color: #fff;
 }
-/* 动画关键帧 */
+/* 动画 */
 @keyframes jump{
     0%,100%{transform:translateY(0);}
     50%{transform:translateY(-15px);}
@@ -376,384 +471,375 @@ body {
     from{opacity:0;transform:translateY(20px);}
     to{opacity:1;transform:translateY(0);}
 }
-/* 适配移动端：花海不挤压，按钮自适应 */
+/* 移动端适配 */
 @media (max-width: 768px) {
     body {padding: 20px;}
     .circle-btn {width: 80px;height: 80px;}
     #drawModal {width: 100vw;}
     .welcome-wrap p {font-size: 24px !important;}
+    .date-display {font-size: 20px;}
+    .wave-img {width: 150px;height: 150px;}
+    .img-card {width: 150px;}
+    .text-wrapper {width: 100%;height: 70px;}
+    #imgBox {gap: 15px;}
 }
     </style>
 </head>
 <body>
-    <!-- 顶部欢迎文字 -->
-    <div class="welcome-wrap">
-        <p style="color:#f088a8;font-size:50px"> 欢迎来到嘉於的网页！</p>
-        <p style="color:#88c8f8;font-size:40px">目前该网页还是建设状态，后续敬请期待！</p>
-        <p style="color:#88c8f8;font-size:24px;"><b>Welcome to Jia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
+<!-- 日期 -->
+<div class="date-display" id="dateDisplay"></div>
+<!-- 欢迎语 -->
+<div class="welcome-wrap">
+    <p style="color:#f088a8;font-size:50px"> 欢迎来到嘉於的网页！</p>
+    <p style="color:#88c8f8;font-size:40px">目前该网页还是建设状态，后续敬请期待！</p>
+    <p style="color:#88c8f8;font-size:24px;"><b>Welcome to Jia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
+</div>
+<!-- 加载动画 -->
+<div class="load-wrap" id="loadWrap">
+    <div class="dot-box">
+        <span></span><span></span><span></span>
     </div>
-    <!-- 加载动画容器（点击后显示） -->
-    <div class="load-wrap" id="loadWrap">
-        <div class="dot-box">
-            <span></span><span></span><span></span>
-        </div>
-        <div class="load-text" id="tipText"></div>
+    <div class="load-text" id="tipText"></div>
+</div>
+<!-- 返回箭头 -->
+<div class="back-arrow" id="backArrow">←</div>
+<!-- 首页 -->
+<div class="text-wrap" id="homePage">
+    <div class="main-top-title">欢迎来到</div>
+    <div class="main-sub-title">欢迎来到主界面</div>
+    <p>彩色圆形按钮散落在文字周围，不会遮挡内容。</p>
+    <p>点击大圆按钮弹出菜单，进入内部页面。</p>
+    <p>左上角 ← 箭头返回首页，弹窗右上角可关闭。</p>
+</div>
+<!-- 圆形按钮 -->
+<button class="circle-btn btn1"></button>
+<button class="circle-btn btn2"></button>
+<button class="circle-btn btn3"></button>
+<button class="circle-btn btn4"></button>
+<button class="circle-btn btn5"></button>
+<!-- 弹窗 -->
+<div class="popup" id="mainPopup">
+    <div class="close-x" id="closePopup">✘</div>
+    <button class="popup-btn" data-page="explore">探索</button>
+    <button class="popup-btn" data-page="publish">发表</button>
+    <button class="popup-btn" data-page="sticker">贴纸</button>
+    <button class="popup-btn" data-page="mailbox">信箱</button>
+</div>
+<!-- 内页 -->
+<div class="app-page" id="page-explore">
+    <h2>🔍 探索页面</h2>
+    <p>热门内容、推荐作品、精选合集都在这里。</p>
+    <p>发现更多有趣的创作，解锁不一样的视觉体验～</p>
+</div>
+<div class="app-page" id="page-publish">
+    <h2>✏️ 发表页面</h2>
+    <p>发布图文、上传作品、编辑内容专区。</p>
+    <p>双击涂鸦图片放大，单击恢复放置。</p>
+    <button id="publishBtn">开始涂鸦</button>
+    <div id="drawModal">
+        <button id="clearCanvas">✘</button>
+        <input type="color" id="colorPicker" value="#2d9d78">
+        <button id="eraserBtn">擦除</button>
+        <button id="saveBtn">✔</button>
+        <canvas id="drawCanvas"></canvas>
     </div>
-    <!-- 返回箭头按钮 -->
-    <div class="back-arrow" id="backArrow">←</div>
-    <!-- 首页分层标题 -->
-    <div class="text-wrap" id="homePage">
-        <div class="main-top-title">欢迎来到</div>
-        <div class="main-sub-title">欢迎来到主界面</div>
-        <p>彩色圆形按钮散落在文字周围，不会遮挡内容。</p>
-        <p>点击大圆按钮弹出菜单，进入内部页面。</p>
-        <p>左上角 ← 箭头返回首页，弹窗右上角可关闭。</p>
-    </div>
-    <!-- 5个100px渐变大圆按钮 -->
-    <button class="circle-btn btn1"></button>
-    <button class="circle-btn btn2"></button>
-    <button class="circle-btn btn3"></button>
-    <button class="circle-btn btn4"></button>
-    <button class="circle-btn btn5"></button>
-    <!-- 带关闭X的弹窗：新增信箱选项 -->
-    <div class="popup" id="mainPopup">
-        <div class="close-x" id="closePopup">✘</div>
-        <button class="popup-btn" data-page="explore">探索</button>
-        <button class="popup-btn" data-page="publish">发表</button>
-        <button class="popup-btn" data-page="sticker">贴纸</button>
-        <button class="popup-btn" data-page="mailbox">信箱</button>
-    </div>
-    <!-- 四个内页：新增信箱内页 -->
-    <div class="app-page" id="page-explore">
-        <h2>🔍 探索页面</h2>
-        <p>热门内容、推荐作品、精选合集都在这里。</p>
-        <p>发现更多有趣的创作，解锁不一样的视觉体验～</p>
-    </div>
-    <div class="app-page" id="page-publish">
-        <h2>✏️ 发表页面</h2>
-        <p>发布图文、上传作品、编辑内容专区。</p>
-        <p>双击涂鸦图片放大，单击恢复放置。</p>
-        <!-- 涂鸦功能 -->
-        <button id="publishBtn">开始涂鸦</button>
-        <!-- 涂鸦弹窗（默认隐藏，点按钮弹出） -->
-        <div id="drawModal">
-            <button id="clearCanvas">✘</button>
-            <input type="color" id="colorPicker" value="#f088a8"> <!-- 默认玫瑰粉画笔 -->
-            <button id="eraserBtn">擦除</button>
-            <button id="saveBtn">✔</button>
-            <canvas id="drawCanvas"></canvas>
-        </div>
-        <!-- 存放生成的带波浪框的涂鸦图片 -->
-        <div id="imgBox"></div>
-    </div>
-    <div class="app-page" id="page-sticker">
-        <h2>🎨 贴纸页面</h2>
-        <p>表情包、装饰贴纸、素材库专区。</p>
-        <p>海量创意贴纸，让你的创作更生动有趣～</p>
-    </div>
-    <div class="app-page" id="page-mailbox">
-        <h2>✉️ 信箱页面</h2>
-        <p>留言互动、消息通知、私信交流专区。</p>
-        <p>在这里接收创作反馈，和小伙伴一起交流灵感吧～</p>
-    </div>
-    <!-- 图片放大遮罩层 -->
-    <div class="zoom-mask" id="zoomMask">
-        <img class="zoom-img" id="zoomImg">
-    </div>
-    <script>
-        // ========== 1. 加载动画功能 ==========
-        const wrap = document.getElementById('loadWrap');
-        const tip = document.getElementById('tipText');
-        const textList = [
-            "不要再点了，正在努力加载(つ﹏<。)",
-            "啊啊啊啊啊跑跑跑动ingヾ(*’Ｏ’*)/"
-        ];
-        function getRandomColor(){
-            let r = Math.floor(Math.random()*256);
-            let g = Math.floor(Math.random()*256);
-            let b = Math.floor(Math.random()*256);
-            return `rgb(${r},${g},${b})`;
-        }
-        document.body.addEventListener('contextmenu',(e)=>{
-            e.preventDefault();
-            if(!wrap.style.display || wrap.style.display === "none"){
-                startPlay();
-            }
-        });
-        function startPlay(){
-            wrap.style.display = "block";
-            tip.innerText = textList[0];
-            tip.style.color = getRandomColor();
-            setTimeout(()=>{
-                tip.innerText = textList[1];
-                tip.style.color = getRandomColor();
-                setTimeout(()=>{
-                    wrap.style.display = "none";
-                },5000);
-            },5000);
-        }
-        // ========== 2. 主界面弹窗/内页切换功能：适配信箱内页 ==========
-        const circleBtns = document.querySelectorAll('.circle-btn');
-        const mainPopup = document.getElementById('mainPopup');
-        const closePopup = document.getElementById('closePopup');
-        const popupBtns = document.querySelectorAll('.popup-btn');
-        const appPages = document.querySelectorAll('.app-page');
-        const backArrow = document.getElementById('backArrow');
-        const zoomMask = document.getElementById('zoomMask');
-        const zoomImg = document.getElementById('zoomImg');
-        // 修复1：页面显示/隐藏时，强制重置放大遮罩层
-        function resetAllStates() {
-            // 关闭放大遮罩
-            zoomMask.style.display = 'none';
-            zoomImg.src = '';
-            // 关闭所有弹窗
-            mainPopup.style.display = 'none';
-            document.getElementById('drawModal').style.display = 'none';
-        }
-        circleBtns.forEach(btn=>{
-            btn.onclick = ()=> {
-                resetAllStates();
-                mainPopup.style.display = "flex";
-            }
-        });
-        closePopup.onclick = ()=>{
-            mainPopup.style.display = "none";
-        };
-        popupBtns.forEach(btn=>{
-            btn.onclick = ()=>{
-                resetAllStates();
-                mainPopup.style.display = "none";
-                let target = btn.getAttribute("data-page");
-                appPages.forEach(p=>p.style.display="none");
-                document.getElementById("page-"+target).style.display="block";
-                backArrow.style.display = "block";
-            };
-        });
-        backArrow.onclick = function(){
-            resetAllStates();
-            appPages.forEach(p=>p.style.display = "none");
-            backArrow.style.display = "none";
-        };
-        // 修复2：监听页面显示事件，回退回来时自动重置状态
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                resetAllStates();
-            }
-        });
-        window.addEventListener('pageshow', resetAllStates);
-        // ========== 3. 涂鸦画板核心功能（坐标完全对齐+高清不糊） ==========
-        const publishBtn = document.getElementById('publishBtn');
-        const drawModal = document.getElementById('drawModal');
-        const saveBtn = document.getElementById('saveBtn');
-        const clearCanvas = document.getElementById('clearCanvas');
-        const colorPicker = document.getElementById('colorPicker');
-        const eraserBtn = document.getElementById('eraserBtn');
-        const canvas = document.getElementById('drawCanvas');
-        const ctx = canvas.getContext('2d');
-        const imgBox = document.getElementById('imgBox');
-        let drawing = false;
-        let lastX = 0, lastY = 0;
-        let currentColor = '#f088a8'; // 默认玫瑰粉画笔
-        let lineWidth = 4;
-        let isEraser = false;
-        let originalImageData = null;
-        // 正确初始化画布，保证显示尺寸和像素尺寸一致
-        function resizeCanvas() {
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-            ctx.lineWidth = lineWidth;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = currentColor;
-            // 修复3：强制画布背景为白色，避免蓝色残留
-            ctx.fillStyle = '#fafafa';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        window.addEventListener('resize', resizeCanvas);
-        // 正确计算鼠标在画布上的真实坐标
-        function getCanvasPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
-        }
-        function draw(e) {
-            if (!drawing) return;
-            // 兼容触摸事件
-            const event = e.touches ? e.touches[0] : e;
-            const pos = getCanvasPos(event);
-            if (isEraser) {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.lineWidth = lineWidth * 3;
-            } else {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = currentColor;
-                ctx.lineWidth = lineWidth;
-            }
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-            lastX = pos.x;
-            lastY = pos.y;
-        }
-        // 鼠标事件
-        canvas.addEventListener('mousedown', (e) => {
-            drawing = true;
-            const pos = getCanvasPos(e);
-            lastX = pos.x;
-            lastY = pos.y;
-        });
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', () => drawing = false);
-        canvas.addEventListener('mouseleave', () => drawing = false);
-        // 触摸事件（移动端适配）
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            drawing = true;
-            const touch = e.touches[0];
-            const pos = getCanvasPos(touch);
-            lastX = pos.x;
-            lastY = pos.y;
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            draw(e);
-        });
-        canvas.addEventListener('touchend', () => drawing = false);
-        canvas.addEventListener('touchcancel', () => drawing = false);
-        // 清空画布
-        clearCanvas.onclick = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // 清空后重绘白色背景
-            ctx.fillStyle = '#fafafa';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        };
-        // 颜色选择器
-        colorPicker.addEventListener('input', (e) => {
-            currentColor = e.target.value;
-            isEraser = false;
-            eraserBtn.classList.remove('active');
-            ctx.strokeStyle = currentColor;
-        });
-        // 橡皮擦功能
-        eraserBtn.onclick = () => {
-            isEraser = !isEraser;
-            eraserBtn.classList.toggle('active', isEraser);
-        };
-        // 打开涂鸦弹窗
-        publishBtn.onclick = () => {
-            resetAllStates();
-            drawModal.style.display = 'block';
-            setTimeout(resizeCanvas, 10);
-        };
-        // 保存涂鸦（核心修复：增加本地存储调用+空画布判断）
-        saveBtn.onclick = () => {
-            // 获取画布原图数据
-            originalImageData = canvas.toDataURL('image/png');
-            
-            // 空画布判断：避免保存空白图片
-            const blankCanvas = document.createElement('canvas');
-            blankCanvas.width = canvas.width;
-            blankCanvas.height = canvas.height;
-            const blankCtx = blankCanvas.getContext('2d');
-            blankCtx.fillStyle = '#fafafa';
-            blankCtx.fillRect(0, 0, blankCanvas.width, blankCanvas.height);
-            const blankData = blankCanvas.toDataURL('image/png');
-            
-            if (originalImageData === blankData) {
-                alert('画布为空，无需保存～');
-                return;
-            }
-
-            // 保存到本地存储（核心修复）
-            saveImageToStorage(originalImageData);
-            
-            // 生成缩略图并添加到页面
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = 100;
-            tempCanvas.height = 100;
-            tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 100, 100);
-            
-            const imgUrl = tempCanvas.toDataURL('image/png');
-            const img = new Image();
-            img.src = imgUrl;
-            img.className = 'wave-img';
-            img.dataset.original = originalImageData;
-            imgBox.appendChild(img);
-            
-            // 关闭涂鸦弹窗
-            drawModal.style.display = 'none';
-        };
-        // ========== 4. 图片放大/缩小功能 ==========
-        imgBox.addEventListener('dblclick', function(e) {
-            if (e.target.classList.contains('wave-img')) {
-                zoomImg.src = e.target.dataset.original;
-                zoomMask.style.display = 'flex';
-            }
-        });
-        zoomMask.addEventListener('click', function(e) {
-            if (e.target === zoomMask || e.target === zoomImg) {
-                zoomMask.style.display = 'none';
-                zoomImg.src = '';
-            }
-        });
-// 本地存储工具函数 - 管理涂鸦图片
-const STORAGE_KEY = 'jiayu_doodle_images';
-
-// 读取本地存储的图片列表
-function getStoredImages() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+    <div id="imgBox"></div>
+</div>
+<div class="app-page" id="page-sticker">
+    <h2>🎨 贴纸页面</h2>
+    <p>表情包、装饰贴纸、素材库专区。</p>
+    <p>海量创意贴纸，让你的创作更生动有趣～</p>
+</div>
+<div class="app-page" id="page-mailbox">
+    <h2>✉️ 信箱页面</h2>
+    <p>留言互动、消息通知、私信交流专区。</p>
+    <p>在这里接收创作反馈，和小伙伴一起交流灵感吧～</p>
+</div>
+<!-- 图片放大 -->
+<div class="zoom-mask" id="zoomMask">
+    <img class="zoom-img" id="zoomImg">
+</div>
+<script>
+// ======================================
+// 日期显示
+// ======================================
+function updateDate() {
+    const dateDisplay = document.getElementById('dateDisplay');
+    const now = new Date();
+    const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const weekDay = weekDays[now.getDay()];
+    dateDisplay.textContent = `${year}年${month}月${day}日 ${weekDay}`;
 }
-
-// 保存图片到本地存储（增加容量限制）
-function saveImageToStorage(imgData) {
-  const images = getStoredImages();
-  // 限制最多保存20张，避免localStorage溢出
-  if (images.length >= 20) {
-      alert('最多只能保存20张涂鸦哦～');
-      return;
-  }
-  images.push(imgData);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+updateDate();
+setInterval(updateDate, 1000);
+// ======================================
+// 右键加载动画
+// ======================================
+const wrap = document.getElementById('loadWrap');
+const tip = document.getElementById('tipText');
+const textList = [
+    "不要再点了，正在努力加载(つ﹏<。)",
+    "啊啊啊啊啊跑跑跑动ingヾ(*’Ｏ’*)/"
+];
+function getRandomColor(){
+    let r = Math.floor(Math.random()*256);
+    let g = Math.floor(Math.random()*256);
+    let b = Math.floor(Math.random()*256);
+    return `rgb(${r},${g},${b})`;
 }
-
-// 清空指定图片（可选，如需删除功能可加）
-function removeImageFromStorage(imgData) {
-  let images = getStoredImages();
-  images = images.filter(item => item !== imgData);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+document.body.addEventListener('contextmenu',(e)=>{
+    e.preventDefault();
+    if(wrap.style.display !== 'block') startPlay();
+});
+function startPlay(){
+    wrap.style.display = "block";
+    tip.innerText = textList[0];
+    tip.style.color = getRandomColor();
+    setTimeout(()=>{
+        tip.innerText = textList[1];
+        tip.style.color = getRandomColor();
+        setTimeout(()=>{ wrap.style.display = "none"; },5000);
+    },5000);
 }
-
-// 页面加载时恢复存储的图片
-function renderStoredImages() {
-  const images = getStoredImages();
-  const imgBox = document.getElementById('imgBox');
-  images.forEach(imgData => {
-    const img = new Image();
-    // 生成缩略图（和保存时逻辑一致）
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCanvas.width = 100;
-    tempCanvas.height = 100;
-    
-    // 先加载原图再缩放到缩略图
-    const originalImg = new Image();
-    originalImg.src = imgData;
-    originalImg.onload = () => {
-      tempCtx.drawImage(originalImg, 0, 0, originalImg.width, originalImg.height, 0, 0, 100, 100);
-      img.src = tempCanvas.toDataURL('image/png');
-      img.className = 'wave-img';
-      img.dataset.original = imgData;
-      imgBox.appendChild(img);
+// ======================================
+// 按钮弹窗 + 页面切换
+// ======================================
+const circleBtns = document.querySelectorAll('.circle-btn');
+const mainPopup = document.getElementById('mainPopup');
+const closePopup = document.getElementById('closePopup');
+const popupBtns = document.querySelectorAll('.popup-btn');
+const appPages = document.querySelectorAll('.app-page');
+const backArrow = document.getElementById('backArrow');
+const zoomMask = document.getElementById('zoomMask');
+const zoomImg = document.getElementById('zoomImg');
+function resetAllStates() {
+    zoomMask.style.display = 'none';
+    zoomImg.src = '';
+    mainPopup.style.display = 'none';
+    document.getElementById('drawModal').style.display = 'none';
+}
+circleBtns.forEach(btn=>{
+    btn.onclick = ()=> { resetAllStates(); mainPopup.style.display = "flex"; }
+});
+closePopup.onclick = ()=>{ mainPopup.style.display = "none"; };
+popupBtns.forEach(btn=>{
+    btn.onclick = ()=>{
+        resetAllStates();
+        mainPopup.style.display = "none";
+        let target = btn.getAttribute("data-page");
+        appPages.forEach(p=>p.style.display="none");
+        document.getElementById("page-"+target).style.display="block";
+        backArrow.style.display = "block";
     };
-  });
+});
+backArrow.onclick = function(){
+    resetAllStates();
+    appPages.forEach(p=>p.style.display = "none");
+    backArrow.style.display = "none";
+};
+// ======================================
+// 涂鸦画板
+// ======================================
+const publishBtn = document.getElementById('publishBtn');
+const drawModal = document.getElementById('drawModal');
+const saveBtn = document.getElementById('saveBtn');
+const clearCanvas = document.getElementById('clearCanvas');
+const colorPicker = document.getElementById('colorPicker');
+const eraserBtn = document.getElementById('eraserBtn');
+const canvas = document.getElementById('drawCanvas');
+const ctx = canvas.getContext('2d');
+const imgBox = document.getElementById('imgBox');
+let drawing = false;
+let lastX = 0, lastY = 0;
+let currentColor = '#2d9d78';
+let lineWidth = 4;
+let isEraser = false;
+function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = currentColor;
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 }
-// 页面加载完成后恢复存储的涂鸦图片
-window.addEventListener('DOMContentLoaded', renderStoredImages);
-    </script>
+window.addEventListener('resize', resizeCanvas);
+function getCanvasPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+function draw(e) {
+    if(!drawing) return;
+    const event = e.touches ? e.touches[0] : e;
+    const pos = getCanvasPos(event);
+    if(isEraser){
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineWidth = lineWidth *3;
+    }else{
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = lineWidth;
+    }
+    ctx.beginPath();
+    ctx.moveTo(lastX,lastY);
+    ctx.lineTo(pos.x,pos.y);
+    ctx.stroke();
+    lastX=pos.x; lastY=pos.y;
+}
+canvas.addEventListener('mousedown',(e)=>{drawing=true; const pos=getCanvasPos(e); lastX=pos.x; lastY=pos.y;});
+canvas.addEventListener('mousemove',draw);
+canvas.addEventListener('mouseup',()=>{drawing=false;});
+canvas.addEventListener('mouseleave',()=>{drawing=false;});
+canvas.addEventListener('touchstart',(e)=>{e.preventDefault(); drawing=true; const t=e.touches[0]; const pos=getCanvasPos(t); lastX=pos.x; lastY=pos.y;});
+canvas.addEventListener('touchmove',(e)=>{e.preventDefault(); draw(e);});
+canvas.addEventListener('touchend',()=>{drawing=false;});
+clearCanvas.onclick = ()=>{ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle='#fafafa'; ctx.fillRect(0,0,canvas.width,canvas.height); };
+colorPicker.addEventListener('input',(e)=>{ currentColor=e.target.value; isEraser=false; eraserBtn.classList.remove('active'); });
+eraserBtn.onclick = ()=>{ isEraser=!isEraser; eraserBtn.classList.toggle('active',isEraser); };
+publishBtn.onclick = ()=>{ resetAllStates(); drawModal.style.display='block'; setTimeout(resizeCanvas,10); };
+// ======================================
+// 核心修复：本地存储结构+文案日期显示逻辑
+// ======================================
+const STORAGE_KEY = 'jiayu_doodle_images';
+// 读取存储的图片（兼容新旧数据格式）
+function getStoredImages(){ 
+    const s=localStorage.getItem(STORAGE_KEY); 
+    if(!s) return [];
+    const data = JSON.parse(s);
+    // 兼容旧版纯图片数据，自动补全文案/日期
+    return data.map(item => {
+        if(typeof item === 'string') {
+            return {data: item, text: '', date: getCurrentDate()};
+        }
+        // 强制兜底空值
+        return {
+            data: item.data || '',
+            text: item.text || '',
+            date: item.date || getCurrentDate()
+        };
+    });
+}
+// 保存图片到存储（带文案和日期）
+function saveImageToStorage(imgData, text = '', date = getCurrentDate()){ 
+    let arr=getStoredImages(); 
+    if(arr.length>=20){alert('最多存20张');return;} 
+    arr.push({data: imgData, text: text, date: date}); 
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(arr)); 
+}
+// 从存储删除图片
+function removeImageFromStorage(imgData) {
+    let images = getStoredImages();
+    images = images.filter(item => item.data !== imgData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+}
+// 获取当前日期（年月日格式）
+function getCurrentDate() {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}年${month}月${day}日`;
+}
+// 创建带删除、文案、日期的图片卡片【核心修复：同步创建DOM，层级置顶，空值强制兜底】
+function createImgCard(imgData, text = '', date = getCurrentDate()) {
+    // 强制空值兜底
+    const cardText = text || '点击右键添加文案';
+    const cardDate = date || getCurrentDate();
+    const card = document.createElement('div');
+    card.className = 'img-card';
+    // 图片容器先创建，避免异步挤压文案
+    const img = document.createElement('img');
+    img.className = 'wave-img';
+    img.dataset.original = imgData;
+    img.src = imgData;
+    // 强制缩放到指定尺寸，解决异步绘制问题
+    img.style.width = '200px';
+    img.style.height = '200px';
+    img.style.objectFit = 'cover';
+    // 删除按钮
+    const deleteBtn = document.createElement('div');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.innerText = '✘';
+    deleteBtn.onclick = () => {
+        card.remove();
+        removeImageFromStorage(imgData);
+    };
+    // 文案+日期容器（强制显示，层级置顶）
+    const textWrap = document.createElement('div');
+    textWrap.className = 'text-wrapper';
+    const txtEl = document.createElement('div');
+    txtEl.className = 'doodle-text';
+    txtEl.innerText = cardText;
+    const dateEl = document.createElement('div');
+    dateEl.className = 'date-text';
+    dateEl.innerText = cardDate;
+    // 右键添加文案
+    img.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const val = prompt('请输入要添加的文案：');
+        if (val !== null) {
+            txtEl.innerText = val || '点击右键添加文案';
+            // 更新本地存储
+            const images = getStoredImages();
+            const target = images.find(item => item.data === imgData);
+            if(target) {
+                target.text = val;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+            }
+        }
+    });
+    // 先加文案日期，再加图片，避免遮挡
+    textWrap.appendChild(txtEl);
+    textWrap.appendChild(dateEl);
+    card.appendChild(img);
+    card.appendChild(deleteBtn);
+    card.appendChild(textWrap);
+    imgBox.appendChild(card);
+}
+// 保存按钮点击事件
+saveBtn.onclick = ()=>{
+    const data = canvas.toDataURL('image/png');
+    const blank = document.createElement('canvas');
+    blank.width=canvas.width; blank.height=canvas.height;
+    const btx=blank.getContext('2d'); btx.fillStyle='#fafafa'; btx.fillRect(0,0,blank.width,blank.height);
+    if(data===blank.toDataURL('image/png')){alert('画布为空');return;}
+    
+    const currentDate = getCurrentDate();
+    saveImageToStorage(data, '', currentDate);
+    createImgCard(data, '', currentDate);
+    drawModal.style.display='none';
+};
+// ======================================
+// 双击放大图片
+// ======================================
+imgBox.addEventListener('dblclick',(e)=>{ 
+    if(e.target.classList.contains('wave-img')){ 
+        zoomImg.src=e.target.dataset.original; 
+        zoomMask.style.display='flex'; 
+    } 
+});
+zoomMask.addEventListener('click',(e)=>{ 
+    if(e.target===zoomMask||e.target===zoomImg){ 
+        zoomMask.style.display='none'; 
+        zoomImg.src=''; 
+    } 
+});
+// ======================================
+// 页面加载时恢复涂鸦（带删除、文案、日期）【核心修复：强制兜底空值】
+// ======================================
+function renderStoredImages(){
+    const imgs=getStoredImages();
+    imgs.forEach(item=>{
+        if(item.data) { // 过滤无效数据
+            createImgCard(item.data, item.text, item.date);
+        }
+    });
+}
+window.addEventListener('DOMContentLoaded',renderStoredImages);
+</script>
 </body>
 </html>
