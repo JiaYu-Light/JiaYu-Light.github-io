@@ -94,6 +94,36 @@ body {
     cursor: pointer;
     z-index: 10;
 }
+/* 探索页面 - 本地红玫瑰图片背景 */
+#page-explore {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 25 !important;
+  background: transparent !important;
+  /* 关键：同目录下直接写图片名 */
+  background-image: url("玫瑰花_20260415145728_132_1.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  overflow-y: auto !important;
+  padding: 60px 40px !important;
+  display: none;
+}
+
+#page-explore::before {
+  content: none !important;
+}
+
+#page-explore h2 {
+  color: #c21e56 !important;
+}
+#page-explore p {
+  color: #990000 !important;
+  font-weight: bold !important;
+}
 /* 发表页面专属样式：青绿色渐变背景 + 含羞草纹理 + 青绿色文字 */
 #page-publish {
     background: linear-gradient(135deg, #e6f4ea 0%, #d4e6c8 50%, #c8f0e0 100%) !important;
@@ -483,6 +513,118 @@ body {
     .text-wrapper {width: 100%;height: 70px;}
     #imgBox {gap: 15px;}
 }
+/* ====================== 贴纸页面 - 紫色玫瑰渐变背景 ====================== */
+#page-sticker {
+  background: linear-gradient(135deg, #f9f4ff 0%, #f0e4ff 30%, #e6d4ff 60%, #d9c2ff 100%) !important;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23b780f8' stroke-width='1' stroke-opacity='0.25'%3E%3Cpath d='M100,50 C120,30 150,40 160,60 C170,80 160,110 140,130 C120,150 90,160 100,180 C110,160 80,150 60,130 C40,110 30,80 40,60 C50,40 80,30 100,50 Z'/%3E%3Cpath d='M60,80 C70,60 90,70 100,90 C110,110 100,130 80,140 C60,150 30,140 40,120 C50,100 50,70 60,80 Z' stroke='%23a868e8' stroke-opacity='0.3'/%3E%3Cpath d='M140,80 C150,60 170,70 180,90 C190,110 180,130 160,140 C140,150 110,140 120,120 C130,100 130,70 140,80 Z' stroke='%23a868e8' stroke-opacity='0.3'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(135deg, #f9f4ff, #d9c2ff);
+  background-attachment: fixed;
+  background-repeat: repeat;
+  background-size: auto, 300px 300px, 100% 100%;
+}
+#page-sticker h2,
+#page-sticker p {
+  color: #9d63d6 !important;
+  text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+}
+/* ====================== 心情变化栏 - 长方形卡片 ====================== */
+.mood-bar {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.mood-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #8a53c7;
+  text-align: center;
+  margin-bottom: 12px;
+}
+/* 长方形心情列表容器 */
+.mood-paper {
+  width: 100%;
+  min-height: 160px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 8px 25px rgba(150,100,200,0.15), 
+              0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #e8d8ff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* 单条心情长方形卡片 */
+.mood-item {
+  width: 100%;
+  padding: 12px 15px;
+  background: #f9f4ff;
+  border-radius: 8px;
+  border: 1px solid #e8d8ff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* 表情样式 */
+.mood-item .pasted-emoji {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+/* 时间样式 */
+.mood-time {
+  font-size: 14px;
+  color: #9d63d6;
+  margin-left: auto;
+  white-space: nowrap;
+}
+/* 放置提示 */
+.mood-paper:empty::before {
+  content: "把表情拖到这里记录心情 📌";
+  color: #c4a8e8;
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+/* ====================== 可拖拽Emoji贴纸 ====================== */
+.emoji-sticker-group {
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.emoji-sticker {
+  width: 50px;
+  height: 50px;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(130,80,180,0.15);
+  cursor: grab;
+  user-select: none;
+  transition: 0.2s;
+}
+.emoji-sticker:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(130,80,180,0.25);
+}
+/* 粘贴到纸上的样式 */
+.pasted-emoji {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+  cursor: default;
+  user-select: none;
+}
     </style>
 </head>
 <body>
@@ -549,6 +691,22 @@ body {
     <h2>🎨 贴纸页面</h2>
     <p>表情包、装饰贴纸、素材库专区。</p>
     <p>海量创意贴纸，让你的创作更生动有趣～</p>
+    <!-- 心情变化栏 - 纸张效果 -->
+    <div class="mood-bar">
+        <div class="mood-title">💖 今日心情变化栏</div>
+        <div class="mood-paper" id="moodPaper"></div>
+    </div>
+    <!-- 可拖拽Emoji贴纸组 -->
+    <div class="emoji-sticker-group">
+        <div class="emoji-sticker" draggable="true" data-emoji="☺️">☺️</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="😊">😊</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="🥰">🥰</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="😌">😌</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="😜">😜</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="😎">😎</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="😭">😭</div>
+        <div class="emoji-sticker" draggable="true" data-emoji="😴">😴</div>
+    </div>
 </div>
 <div class="app-page" id="page-mailbox">
     <h2>✉️ 信箱页面</h2>
@@ -824,8 +982,8 @@ imgBox.addEventListener('dblclick',(e)=>{
 });
 zoomMask.addEventListener('click',(e)=>{ 
     if(e.target===zoomMask||e.target===zoomImg){ 
-        zoomMask.style.display='none'; 
-        zoomImg.src=''; 
+        zoomMask.style.display='none';
+        zoomImg.src='';
     } 
 });
 // ======================================
@@ -840,6 +998,50 @@ function renderStoredImages(){
     });
 }
 window.addEventListener('DOMContentLoaded',renderStoredImages);
+// ====================== 心情贴纸拖拽功能（带时间+多条长方形）======================
+const moodPaper = document.getElementById('moodPaper');
+const stickers = document.querySelectorAll('.emoji-sticker');
+// 获取当前年月日时间
+function getMoodDateTime() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const h = String(d.getHours()).padStart(2, '0');
+  const m = String(d.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day} ${h}:${m}`;
+}
+// 拖拽开始
+stickers.forEach(s => {
+  s.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('emoji', s.dataset.emoji);
+  });
+});
+// 允许放置
+moodPaper.addEventListener('dragover', e => {
+  e.preventDefault();
+});
+// 拖放完成：生成带时间的长方形心情卡片
+moodPaper.addEventListener('drop', e => {
+  e.preventDefault();
+  const emoji = e.dataTransfer.getData('emoji');
+  if (!emoji) return;
+  // 创建单条卡片
+  const item = document.createElement('div');
+  item.className = 'mood-item';
+  // 表情
+  const emojiEl = document.createElement('span');
+  emojiEl.className = 'pasted-emoji';
+  emojiEl.textContent = emoji;
+  // 时间
+  const timeEl = document.createElement('div');
+  timeEl.className = 'mood-time';
+  timeEl.textContent = getMoodDateTime();
+  // 组装
+  item.appendChild(emojiEl);
+  item.appendChild(timeEl);
+  moodPaper.appendChild(item);
+});
 </script>
 </body>
 </html>
