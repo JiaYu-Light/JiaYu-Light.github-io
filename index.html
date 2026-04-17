@@ -112,11 +112,9 @@ body {
   padding: 60px 40px !important;
   display: none;
 }
-
 #page-explore::before {
   content: none !important;
 }
-
 #page-explore h2 {
   color: #c21e56 !important;
 }
@@ -334,9 +332,9 @@ body {
 }
 /* 圆形按钮 */
 .circle-btn {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
     border: none;
     cursor: pointer;
     position: absolute;
@@ -625,6 +623,173 @@ body {
   cursor: default;
   user-select: none;
 }
+/* ====================== 信箱页面 - 黄昏背景 ====================== */
+#page-mailbox {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 25 !important;
+  background: transparent !important;
+  background-image: url("黄昏_20260417131135_136_1.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  overflow-y: auto !important;
+  padding: 60px 40px !important;
+  display: none;
+}
+#page-mailbox::before {
+  content: none !important;
+}
+#page-mailbox h2 {
+  color: #fff !important;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+#page-mailbox p {
+  color: #fff !important;
+  font-weight: bold !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* ✉️ 信封样式（新增，不影响背景） */
+.envelope {
+  width: 260px;
+  height: 180px;
+  background: #fff8f0;
+  border-radius: 12px;
+  margin: 60px auto;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.envelope:hover {
+  transform: scale(1.05);
+}
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: #ffe8d0;
+  clip-path: polygon(0 0, 50% 50%, 100% 0);
+  border-radius: 12px 12px 0 0;
+  transition: transform 0.4s;
+  transform-origin: top center;
+}
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 130px;
+  background: #ffeed8;
+  border-radius: 0 0 12px 12px;
+}
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+/* 📝 信纸弹窗（新增） */
+.letter-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.letter-paper {
+  width: 90%;
+  max-width: 600px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+}
+.letter-paper h3 {
+  text-align: center;
+  color: #c21e56;
+  margin-bottom: 20px;
+}
+.letter-textarea {
+  width: 100%;
+  height: 220px;
+  padding: 15px;
+  font-size: 16px;
+  border: 2px solid #f8a8c8;
+  border-radius: 8px;
+  resize: none;
+  margin-bottom: 15px;
+  user-select: auto !important;
+}
+/* 手动落款输入框（右下角） */
+.sign-input {
+  width: 200px;
+  padding: 8px 12px;
+  border: 1px solid #f8a8c8;
+  border-radius: 6px;
+  font-size: 15px;
+  margin-left: auto;
+  display: block;
+  margin-bottom: 20px;
+  user-select: auto !important;
+}
+.letter-btn {
+  padding: 12px 25px;
+  background: #f088a8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+.letter-btn:hover {
+  background: #d86888;
+}
+.letter-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+/* 已保存信件展示 */
+.saved-letter {
+  background: rgba(255,255,255,0.92);
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  display: none;
+}
+.saved-letter h4 {
+  color: #c21e56;
+  margin-bottom: 10px;
+}
+.saved-content {
+  white-space: pre-wrap;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.saved-sign {
+  text-align: right;
+  color: #666;
+  font-size: 15px;
+}
     </style>
 </head>
 <body>
@@ -634,7 +799,7 @@ body {
 <div class="welcome-wrap">
     <p style="color:#f088a8;font-size:50px"> 欢迎来到嘉於的网页！</p>
     <p style="color:#88c8f8;font-size:40px">目前该网页还是建设状态，后续敬请期待！</p>
-    <p style="color:#88c8f8;font-size:24px;"><b>Welcome to Jia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
+    <p style="color:#88c8f8;fontsize:24px;"><b>Welcome to Jia Yu's webpage !The site is currently under construction .Stay tuned for future updates !</b></p>
 </div>
 <!-- 加载动画 -->
 <div class="load-wrap" id="loadWrap">
@@ -710,9 +875,34 @@ body {
 </div>
 <div class="app-page" id="page-mailbox">
     <h2>✉️ 信箱页面</h2>
-    <p>留言互动、消息通知、私信交流专区。</p>
-    <p>在这里接收创作反馈，和小伙伴一起交流灵感吧～</p>
+    <p>点击信封写信，写下你的心事～</p>
+
+    <!-- 信封 -->
+    <div class="envelope" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body"></div>
+    </div>
+
+    <!-- 信纸弹窗 -->
+    <div class="letter-modal" id="letterModal">
+        <div class="letter-paper">
+            <div class="letter-close" id="letterClose">✕</div>
+            <h3>💌 写信</h3>
+            <textarea class="letter-textarea" id="letterText" placeholder="在这里写下你想说的话..."></textarea>
+            <input type="text" class="sign-input" id="signInput" placeholder="✍️ 右下角落款">
+            <button class="letter-btn" id="saveLetter">保存信件</button>
+            <button class="letter-btn" id="cancelLetter">取消</button>
+        </div>
+    </div>
+
+    <!-- 已保存信件 -->
+    <div class="saved-letter" id="savedLetter">
+        <h4>📩 已保存的信</h4>
+        <div class="saved-content" id="savedContent"></div>
+        <div class="saved-sign" id="savedSign"></div>
+    </div>
 </div>
+
 <!-- 图片放大 -->
 <div class="zoom-mask" id="zoomMask">
     <img class="zoom-img" id="zoomImg">
@@ -733,35 +923,71 @@ function updateDate() {
 }
 updateDate();
 setInterval(updateDate, 1000);
+
 // ======================================
-// 右键加载动画
+// ✉️ 信封 + 写信功能（纯新增）
 // ======================================
-const wrap = document.getElementById('loadWrap');
-const tip = document.getElementById('tipText');
-const textList = [
-    "不要再点了，正在努力加载(つ﹏<。)",
-    "啊啊啊啊啊跑跑跑动ingヾ(*’Ｏ’*)/"
-];
-function getRandomColor(){
-    let r = Math.floor(Math.random()*256);
-    let g = Math.floor(Math.random()*256);
-    let b = Math.floor(Math.random()*256);
-    return `rgb(${r},${g},${b})`;
-}
-document.body.addEventListener('contextmenu',(e)=>{
-    e.preventDefault();
-    if(wrap.style.display !== 'block') startPlay();
+const envelope = document.getElementById('envelope');
+const letterModal = document.getElementById('letterModal');
+const letterClose = document.getElementById('letterClose');
+const saveLetter = document.getElementById('saveLetter');
+const cancelLetter = document.getElementById('cancelLetter');
+const letterText = document.getElementById('letterText');
+const signInput = document.getElementById('signInput');
+const savedLetter = document.getElementById('savedLetter');
+const savedContent = document.getElementById('savedContent');
+const savedSign = document.getElementById('savedSign');
+
+// 点击信封打开信纸
+envelope.addEventListener('click', () => {
+  envelope.classList.add('open');
+  setTimeout(() => {
+    letterModal.style.display = 'flex';
+  }, 300);
 });
-function startPlay(){
-    wrap.style.display = "block";
-    tip.innerText = textList[0];
-    tip.style.color = getRandomColor();
-    setTimeout(()=>{
-        tip.innerText = textList[1];
-        tip.style.color = getRandomColor();
-        setTimeout(()=>{ wrap.style.display = "none"; },5000);
-    },5000);
+
+// 关闭信纸
+function closeLetter() {
+  letterModal.style.display = 'none';
+  setTimeout(() => {
+    envelope.classList.remove('open');
+  }, 200);
 }
+letterClose.addEventListener('click', closeLetter);
+cancelLetter.addEventListener('click', closeLetter);
+
+// 保存信件（手动落款）
+saveLetter.addEventListener('click', () => {
+  const text = letterText.value.trim();
+  const sign = signInput.value.trim();
+  
+  if (!text) {
+    alert('请先写点什么吧～');
+    return;
+  }
+
+  localStorage.setItem('letterContent', text);
+  localStorage.setItem('letterSign', sign);
+
+  savedContent.textContent = text;
+  savedSign.textContent = sign ? `—— ${sign}` : '';
+  savedLetter.style.display = 'block';
+  
+  alert('信件已保存！');
+  closeLetter();
+});
+
+// 加载已保存信件
+window.addEventListener('DOMContentLoaded', () => {
+  const text = localStorage.getItem('letterContent');
+  const sign = localStorage.getItem('letterSign');
+  if (text) {
+    savedContent.textContent = text;
+    savedSign.textContent = sign ? `—— ${sign}` : '';
+    savedLetter.style.display = 'block';
+  }
+});
+
 // ======================================
 // 按钮弹窗 + 页面切换
 // ======================================
