@@ -7,7 +7,7 @@
     <style>
 /* 全局样式重置 */
 * {margin:0;padding:0;box-sizing:border-box;}
-/* 抽象油画棒粉嫩玫瑰花海 - 全局背景 */
+/* 主界面背景：树图片（同目录本地路径） */
 body {
   min-height: 100vh;
   padding: 40px;
@@ -15,14 +15,11 @@ body {
   line-height: 2;
   position: relative;
   overflow-x: hidden;
-  background: linear-gradient(135deg, #fff5f8 0%, #ffe8ef 30%, #ffd9e6 60%, #ffccd8 100%);
-  background-attachment: fixed;
-  background-image: 
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23f8a8c8' stroke-width='1' stroke-opacity='0.2'%3E%3Cpath d='M100,50 C120,30 150,40 160,60 C170,80 160,110 140,130 C120,150 90,160 100,180 C110,160 80,150 60,130 C40,110 30,80 40,60 C50,40 80,30 100,50 Z'/%3E%3Cpath d='M60,80 C70,60 90,70 100,90 C110,110 100,130 80,140 C60,150 30,140 40,120 C50,100 50,70 60,80 Z' stroke='%23f088a8' stroke-opacity='0.3'/%3E%3Cpath d='M140,80 C150,60 170,70 180,90 C190,110 180,130 160,140 C140,150 110,140 120,120 C130,100 130,70 140,80 Z' stroke='%23f088a8' stroke-opacity='0.3'/%3E%3C/g%3E%3C/svg%3E"),
-    linear-gradient(135deg, #fff5f8, #ffccd8);
-  background-repeat: repeat;
-  background-size: auto, 300px 300px, 100% 100%;
+  background-image: url("树_20260420212828_52_60.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
 }
 /* 日期显示 */
 .date-display {
@@ -511,16 +508,14 @@ body {
     .text-wrapper {width: 100%;height: 70px;}
     #imgBox {gap: 15px;}
 }
-/* ====================== 贴纸页面 - 紫色玫瑰渐变背景 ====================== */
+/* ====================== 贴纸页面 - 天空图片背景（同目录本地路径） ====================== */
 #page-sticker {
-  background: linear-gradient(135deg, #f9f4ff 0%, #f0e4ff 30%, #e6d4ff 60%, #d9c2ff 100%) !important;
-  background-image: 
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23b780f8' stroke-width='1' stroke-opacity='0.25'%3E%3Cpath d='M100,50 C120,30 150,40 160,60 C170,80 160,110 140,130 C120,150 90,160 100,180 C110,160 80,150 60,130 C40,110 30,80 40,60 C50,40 80,30 100,50 Z'/%3E%3Cpath d='M60,80 C70,60 90,70 100,90 C110,110 100,130 80,140 C60,150 30,140 40,120 C50,100 50,70 60,80 Z' stroke='%23a868e8' stroke-opacity='0.3'/%3E%3Cpath d='M140,80 C150,60 170,70 180,90 C190,110 180,130 160,140 C140,150 110,140 120,120 C130,100 130,70 140,80 Z' stroke='%23a868e8' stroke-opacity='0.3'/%3E%3C/g%3E%3C/svg%3E"),
-    linear-gradient(135deg, #f9f4ff, #d9c2ff);
-  background-attachment: fixed;
-  background-repeat: repeat;
-  background-size: auto, 300px 300px, 100% 100%;
+  background: transparent !important;
+  background-image: url("天空_20260420212830_53_60.jpg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
 }
 #page-sticker h2,
 #page-sticker p {
@@ -652,7 +647,6 @@ body {
   font-weight: bold !important;
   text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
-
 /* ✉️ 信封样式（新增，不影响背景） */
 .envelope {
   width: 260px;
@@ -692,7 +686,6 @@ body {
 .envelope.open .envelope-flap {
   transform: rotateX(180deg);
 }
-
 /* 📝 信纸弹窗（新增） */
 .letter-modal {
   position: fixed;
@@ -876,13 +869,11 @@ body {
 <div class="app-page" id="page-mailbox">
     <h2>✉️ 信箱页面</h2>
     <p>点击信封写信，写下你的心事～</p>
-
     <!-- 信封 -->
     <div class="envelope" id="envelope">
         <div class="envelope-flap"></div>
         <div class="envelope-body"></div>
     </div>
-
     <!-- 信纸弹窗 -->
     <div class="letter-modal" id="letterModal">
         <div class="letter-paper">
@@ -894,7 +885,6 @@ body {
             <button class="letter-btn" id="cancelLetter">取消</button>
         </div>
     </div>
-
     <!-- 已保存信件 -->
     <div class="saved-letter" id="savedLetter">
         <h4>📩 已保存的信</h4>
@@ -902,7 +892,6 @@ body {
         <div class="saved-sign" id="savedSign"></div>
     </div>
 </div>
-
 <!-- 图片放大 -->
 <div class="zoom-mask" id="zoomMask">
     <img class="zoom-img" id="zoomImg">
@@ -923,7 +912,6 @@ function updateDate() {
 }
 updateDate();
 setInterval(updateDate, 1000);
-
 // ======================================
 // ✉️ 信封 + 写信功能（纯新增）
 // ======================================
@@ -937,7 +925,6 @@ const signInput = document.getElementById('signInput');
 const savedLetter = document.getElementById('savedLetter');
 const savedContent = document.getElementById('savedContent');
 const savedSign = document.getElementById('savedSign');
-
 // 点击信封打开信纸
 envelope.addEventListener('click', () => {
   envelope.classList.add('open');
@@ -945,7 +932,6 @@ envelope.addEventListener('click', () => {
     letterModal.style.display = 'flex';
   }, 300);
 });
-
 // 关闭信纸
 function closeLetter() {
   letterModal.style.display = 'none';
@@ -955,7 +941,6 @@ function closeLetter() {
 }
 letterClose.addEventListener('click', closeLetter);
 cancelLetter.addEventListener('click', closeLetter);
-
 // 保存信件（手动落款）
 saveLetter.addEventListener('click', () => {
   const text = letterText.value.trim();
@@ -965,10 +950,8 @@ saveLetter.addEventListener('click', () => {
     alert('请先写点什么吧～');
     return;
   }
-
   localStorage.setItem('letterContent', text);
   localStorage.setItem('letterSign', sign);
-
   savedContent.textContent = text;
   savedSign.textContent = sign ? `—— ${sign}` : '';
   savedLetter.style.display = 'block';
@@ -976,7 +959,6 @@ saveLetter.addEventListener('click', () => {
   alert('信件已保存！');
   closeLetter();
 });
-
 // 加载已保存信件
 window.addEventListener('DOMContentLoaded', () => {
   const text = localStorage.getItem('letterContent');
@@ -987,7 +969,6 @@ window.addEventListener('DOMContentLoaded', () => {
     savedLetter.style.display = 'block';
   }
 });
-
 // ======================================
 // 按钮弹窗 + 页面切换
 // ======================================
@@ -1125,7 +1106,7 @@ function getCurrentDate() {
     const d = new Date();
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+    const day = String(day.getDate()).padStart(2, '0');
     return `${year}年${month}月${day}日`;
 }
 // 创建带删除、文案、日期的图片卡片【核心修复：同步创建DOM，层级置顶，空值强制兜底】
